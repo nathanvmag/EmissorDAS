@@ -1,0 +1,9 @@
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\bin\Debug\webTest.exe.config
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\bin\Debug\webTest.exe
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\bin\Debug\webTest.pdb
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.csprojResolveAssemblyReference.cache
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.Form1.resources
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.Properties.Resources.resources
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.csproj.GenerateResource.Cache
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.exe
+c:\users\nathan\documents\visual studio 2015\Projects\webTest\webTest\obj\Debug\webTest.pdb
