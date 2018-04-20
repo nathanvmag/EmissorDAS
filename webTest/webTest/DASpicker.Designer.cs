@@ -1,6 +1,6 @@
 ﻿namespace webTest
 {
-    partial class Form1
+    partial class DASpicker
     {
         /// <summary>
         /// Required designer variable.
@@ -31,14 +31,15 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
-            // Form1
+            // DASpicker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(731, 391);
-            this.Name = "Form1";
+            this.ClientSize = new System.Drawing.Size(734, 244);
+            this.Name = "DASpicker";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DASpicker_FormClosed);
             this.ResumeLayout(false);
 
         }
