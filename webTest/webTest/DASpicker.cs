@@ -13,6 +13,7 @@ using System.IO;
 using System.Timers;
 using webTest;
 using System.Globalization;
+using System.Net;
 
 namespace webTest
 {
@@ -34,15 +35,36 @@ namespace webTest
         bool fix;
         int c = 0;
         bool exit;
-        DASpicker ds;
         public static bool canexit;
         bool coucomp;
         JavascriptResponse jr;
         bool download = false;
-        public DASpicker(string cnpjj, string data, int[] tab, int[] recs, bool initialized, bool c)
+        int tempcounter = 0;
+
+        System.Windows.Forms.Timer t;
+        public DASpicker(string cnpjj, string data, int[] tab, int[] recs, bool initialized, bool c2)
         {
+            chromeBrowser = new ChromiumWebBrowser();
+            int counter = 0;
+            logado = false;
+            cnpj = "";
+            myadress = "";
+            comecadas = new bool();
+            completeTask = false;
+            receitas = new int[0] { };
+            DATA = "";
+            Tabela = new int[0] { };
+            fix = new bool();
+            c = 0;
+            exit = new bool();
+            canexit = new bool();
+            coucomp = new bool();
+            download = false;
+            tempcounter = 0;
+
+            //COMEÇA AQUI ANTES É PARA RESET
             fix = initialized;
-            cnpj = cnpjj;
+            cnpj = cnpjj.Trim();
             DATA = data;
             Tabela = tab;
             receitas = recs;
@@ -52,11 +74,33 @@ namespace webTest
             comecadas = false;
             completeTask = false;
             exit = false;
-            ds = this;
-            coucomp = c;
+            coucomp = c2;
             DownloadHandler.count = 0;
             download = true;
+            counter = 0;
+            tempcounter = counter + 1;
+            c = 0;
+            t = new System.Windows.Forms.Timer();
+            t.Tick += T_Tick;                           
+                              
+            t.Interval = 5000;
+           t.Enabled = true;
         }
+
+        private void T_Tick(object sender, EventArgs e)
+        {
+            if (counter >= 2)
+            {
+                if (counter != tempcounter) tempcounter = counter;
+                else
+                {
+                    RestartALL();
+                    Console.WriteLine("Pelo contador");
+                }
+            }
+            Console.WriteLine("salva bugs " + counter + " " + tempcounter);
+        }
+
         public void InitializeChromium()
         {
 
@@ -64,17 +108,20 @@ namespace webTest
             Completetask = new Task(() => { completeTask = true; });
 
             chromeBrowser = new ChromiumWebBrowser("https://cav.receita.fazenda.gov.br/autenticacao");
-            chromeBrowser.LoadingStateChanged += ChromeBrowser_LoadingStateChanged;
             chromeBrowser.AddressChanged += ChromeBrowser_AddressChanged;
             chromeBrowser.DownloadHandler = new DownloadHandler();
-
+            chromeBrowser.IsBrowserInitializedChanged += ChromeBrowser_IsBrowserInitializedChanged;  
             this.Controls.Add(chromeBrowser);
             chromeBrowser.Dock = DockStyle.Fill;
 
 
         }
 
+        private void ChromeBrowser_IsBrowserInitializedChanged(object sender, IsBrowserInitializedChangedEventArgs e)
+        {
+           if (e.IsBrowserInitialized) chromeBrowser.LoadingStateChanged += ChromeBrowser_LoadingStateChanged;
 
+        }
 
         private void ChromeBrowser_AddressChanged(object sender, AddressChangedEventArgs e)
         {
@@ -82,7 +129,7 @@ namespace webTest
 
         }
 
-        private void ChromeBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        private async void ChromeBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
 
 
@@ -92,13 +139,17 @@ namespace webTest
                 {
                     if (myadress == "https://cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/sair") ;
                     canexit = true;
+                    t.Stop();
+                    t = null;
                 }
                 if (!fix)
                 {
                     if (counter == 0 && !logado)
                     {
-                        System.Threading.Thread.Sleep(2000);
-                        chromeBrowser.ExecuteScriptAsync(GetElement("caixa-login-certificado") + ".click()");
+                        Console.Write("começa aui /r/n");
+                        // chromeBrowser.ExecuteScriptAsync(GetElement("caixa-login-certificado") + ".click()");
+                        ClickId("caixa-login-certificado");
+
                         counter++;
 
 
@@ -106,29 +157,51 @@ namespace webTest
 
                     else if (counter == 1 && !logado)
                     {
-                        ClickId("btnPerfil");
-                        ChangeValue("txtNIPapel2", cnpj);
-                        chromeBrowser.ExecuteScriptAsync("enviaDados('formPJ')");
+                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
+                        
+                       
+                            Console.WriteLine("tentou"+ cnpj);
+                            jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                            await Task.Delay(2000);
+                       
+                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
+                        Console.WriteLine("aqui1");
                         counter++;
 
                     }
                     if (counter == 2 && !logado)
                     {
 
-                        ClickId("btnPerfil");
-                        logado = true;
-                        counter = 2;
-                        completeTask = false;
-                        loguei = chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/ecac/Aplicacao.aspx?id=10009&origem=menu';").ContinueWith(task => completeTask = true);
-                    }
+                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
+                                             
+                            Console.WriteLine("tentou" + cnpj);
+                            jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                            await Task.Delay(2000);
+                        
+
+                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
+                        Console.WriteLine("aqui2");
+                        if (jr.Success) {
+                            Console.WriteLine("loguei");
+                            logado = true;
+                            counter = 2;
+                            completeTask = false;
+                            loguei = chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/ecac/Aplicacao.aspx?id=10009&origem=menu';").ContinueWith(task => completeTask = true);
+                        }
+                        }
                     if (loguei != null && loguei.IsCompleted) comecadas = true;
                 }
                 else
                 {
-                    completeTask = false;
-                    ClickId("btnPerfil");
-                    ChangeValue("txtNIPapel2", cnpj);
-                    chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')").ContinueWith(task => fixstart());
+                    Console.Write("RJRJRJR");
+                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
+                    Console.WriteLine("tentou");
+                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                    await Task.Delay(2000);
+                    
+                    jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
+                    Console.WriteLine("PORRA");
+                    if (jr.Success) fixstart();
                 }
                 if (comecadas)
                 {
@@ -140,25 +213,22 @@ namespace webTest
 
             }
         }
-        void fixstart()
+               void fixstart()
         {
             c++;
             // comecadas = true;
             counter = 2;
             Console.WriteLine("AQUI");
-            completeTask = true;
             fix = false;
             logado = true;
-            if (c == 2)
+            if (c == 2||c==1)
             {
                 start();
             }
         }
         async void start()
         {
-            await Task.Delay(3000);
             comecadas = true;
-            Console.WriteLine("esepero e vieo");
             GetDas(counter, DATA, Tabela, receitas[0], receitas[1], receitas[2], receitas[3], coucomp);
 
         }
@@ -232,7 +302,6 @@ namespace webTest
                 {
                     completeTask = false;
                     jr = await chromeBrowser.EvaluateScriptAsync("for (var i =0;i<document.querySelectorAll('[data-atividade]').length;i++){if(document.querySelectorAll('[data-atividade]')[i].children[1].value!=''){document.querySelectorAll('[data-atividade]')[i].children[1].click();console.log('eee')}}");
-
                     if (!jr.Success) RestartALL();
                     checkActivities(tabela);
                     ClickId("btn-salvar");
@@ -266,8 +335,8 @@ namespace webTest
                     //if (!jr.Success) RestartALL();
                     download = false;
                     await Task.Delay(4000);
-                    exit = true;
-                     await chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/sair'");
+                   //  exit = true;
+                    // await chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/sair'");
 
 
                 }
@@ -318,10 +387,29 @@ namespace webTest
 
         async void RestartALL()
         {
-            counter = 1;
-            jr = await chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://sinac.cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/declaracao?clear=1'");
+            if (Server.ds != null)
+            {
+                counter = 1;
+                jr = await chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://sinac.cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/declaracao?clear=1'");
 
-            Console.WriteLine("RESETOUUUU");
+                Console.WriteLine("RESETOUUUU");
+            }
+        }
+        public void  erroclose()
+        {
+           
+            using (WebClient webclient = new WebClient())
+            {
+                webclient.Encoding = Encoding.UTF8;
+                var parametres = new System.Collections.Specialized.NameValueCollection();
+                parametres.Add("servID", "356");
+                parametres.Add("cnpj",cnpj);
+                parametres.Add("mes", int.Parse(DATA.Split('/')[0]) + "");
+                string tbs = Encoding.UTF8.GetString(webclient.UploadValues(Server.serversite + "/Site/login.php", parametres));
+                Console.WriteLine("Resultado do erro : "+tbs);
+            }
+            exit = true;
+            chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/sair'");
 
         }
 
@@ -356,6 +444,7 @@ namespace webTest
                 exit = true;
                 chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgdasd2018.app/sair'");
                 e.Cancel = exit;
+               // t.Stop(); 
             }
 
             // Cef.ShutdownWithoutChecks();  
@@ -384,7 +473,10 @@ namespace webTest
         }
         string convert(float num)
         {
-            return ((float)(num) / 100f).ToString().Replace(".", ",");
+            string s = num.ToString();
+
+            if (s.Length >= 3) return s.Substring(0, s.Length - 2) + "," + s.Substring(s.Length - 2);
+            else return "0," + s;
         }
     }
 
@@ -440,7 +532,7 @@ namespace webTest
                 {
                     if (File.Exists(file1) && File.Exists(file2))
                     {
-                        if (FileEquals(file1, file2))
+                        if (!FileEquals(file1, file2))
                             count = 2;
                     }
                 }

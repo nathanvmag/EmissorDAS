@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
+using System.Collections;
+using System.Threading;
 
 namespace webTest
 {
@@ -18,7 +21,11 @@ namespace webTest
         int boletosday, today;
         public static string cachepath = Path.Combine(Path.GetTempPath(), "/cachecef");
         bool first = true;
-       public static DASpicker ds;
+        WebClient webclient;
+        public static DASpicker ds;
+        public static Queue<string> requests;
+        public const string serversite = "http://localhost";
+        float opentime;
         public Server()
         {
             InitializeComponent();
@@ -27,6 +34,9 @@ namespace webTest
             cnpjbox.Text = "27124625000111";
             textBox1.Text = "0";
             textBox2.Text = "0";
+            webclient = new WebClient();
+            webclient.Encoding = Encoding.UTF8;
+            requests = new Queue<string>();
           
         }
 
@@ -39,8 +49,9 @@ namespace webTest
                     string cnpjb = cnpjbox.Text;
                     string date = numericUpDown1.Value < 10 ? "0" + numericUpDown1.Value + "/2018" : numericUpDown1.Value + "/2018";
                     int[] recs = new int[4] { int.Parse(textBox1.Text.Replace(",","")), int.Parse(textBox2.Text.Replace(",", "")), 0, 0 };
-                     ds = new DASpicker(cnpjb, date, new int[1] { 13}, recs,first,true);
-                     ds.Show();
+                    ds = null;
+                    ds = new DASpicker(cnpjb, date, new int[2] {0,23}, recs,first,true);
+                    ds.Show();
                      ds.Name = "Emitir DAS de " + cnpjb;
                     first = true;
                 }
@@ -51,8 +62,7 @@ namespace webTest
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) 
-                 )
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) )
             {
                 e.Handled = true;
             }
@@ -90,7 +100,22 @@ namespace webTest
             }
             if (ds != null && !ds.Visible)
                 ds = null;
+            if (!timer2.Enabled &&( !ds.Visible|| ds!=null))
+                timer2.Enabled = true;
+           
+            if(ds!=null&&ds.Visible)
+            {
+                opentime += 1;
+                Console.WriteLine(opentime);
+                if (opentime>1000)
+                {
+                    ds.erroclose();
+                    opentime = 0;
+                }
             }
+            }
+
+
 
         private void Server_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -135,13 +160,81 @@ namespace webTest
 
         private void textBox1_Leave(object sender, EventArgs e)
         {
-           ( (TextBox)sender).Text = convert(float.Parse(((TextBox)sender).Text));
+           ( (TextBox)sender).Text = convert(((TextBox)sender).Text);
+
+        }
+        static AutoResetEvent autoEvent = new AutoResetEvent(false);
+
+        private async void timer2_Tick(object sender, EventArgs e)
+        {
+            if (requests.Count == 0)
+            {
+                try
+                {
+                    string query = webclient.DownloadString(serversite + "/Site/r/requests.txt");
+                    Console.WriteLine(query);
+                    string ex = webclient.DownloadString(serversite + "/Site/r/clean.php");
+                    if (ex == "1") Console.WriteLine("sucess");
+                    foreach (string s in query.Split('|'))
+                    {
+                        if (!String.IsNullOrEmpty(s)) requests.Enqueue(s);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //((System.Windows.Forms.Timer)sender).Stop();
+                   // Console.WriteLine("nao possui");
+                }
+            }
+            else
+            {
+                if (requests.Count > 0)
+                {
+                    if (ds == null || ds != null && !ds.Visible)
+                    {
+                        string work = requests.Dequeue();
+                        string[] infos = work.Split('?');
+                        var parametres = new System.Collections.Specialized.NameValueCollection();
+                        parametres.Add("servID", "881");
+                        parametres.Add("cnpj", infos[0].Trim());
+                        string tbs = Encoding.UTF8.GetString(webclient.UploadValues(serversite + "/Site/login.php", parametres));
+                        List<int> tts = new List<int>();
+                        int[] finaltab = new int[0];
+                        Console.WriteLine("tbs= " + tbs);
+                        if (tbs.Split('@')[1].Split(',').Length > 0)
+                        {
+                            foreach (string s in tbs.Split('@')[1].Split(','))
+                            {
+                                if (!String.IsNullOrEmpty(s)) tts.Add(int.Parse(s));
+                            }
+                            finaltab = tts.ToArray();
+                        }
+                        int[] myrecs = new int[4] { int.Parse(infos[1]), int.Parse(infos[2]), 0, 0 };
+
+                        string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] + "/2018" : infos[3] + "/2018";
+                        Console.WriteLine(infos[0] + "  " + date + "  " + finaltab.Length + "  " + myrecs.Length);
+                        Console.WriteLine(tbs.Split('@')[0]);
+                        ds = null;
+                        ds = new DASpicker(infos[0], date, finaltab, myrecs, first, tbs.Split('@')[0] == "0" ? false : true);
+                        ds.Show();
+                        ds.Name = "Emitir DAS de " + infos[0];
+                        first = true;
+                        timer2.Enabled  =false;
+                        boletosday++;
+                        opentime = 0;
+
+                    }
+                }
+            }
 
         }
 
-        string convert(float num)
+        string convert(string num)
         {
-            return ((float)(num) / 100f).ToString().Replace(".", ",");
+            string s = num.ToString();
+
+            if (s.Length >= 3) return s.Substring(0, s.Length - 2) + "," + s.Substring(s.Length - 2);
+            else return "0," + s;
         }
     }
 }
