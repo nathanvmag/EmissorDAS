@@ -26,18 +26,27 @@ namespace webTest
         public static Queue<string> requests;
         public const string serversite = "http://localhost";
         float opentime;
+        string reqfile = @"C:\xampp\htdocs\Site\r\requests.txt";
+        public static int errors;
         public Server()
         {
-            InitializeComponent();
-            initializeCEF();
-            first = false;
-            cnpjbox.Text = "27124625000111";
-            textBox1.Text = "0";
-            textBox2.Text = "0";
-            webclient = new WebClient();
-            webclient.Encoding = Encoding.UTF8;
-            requests = new Queue<string>();
-          
+            try
+            {
+                InitializeComponent();
+                initializeCEF();
+                first = false;
+                cnpjbox.Text = "27124625000111";
+                textBox1.Text = "0";
+                textBox2.Text = "0";
+                webclient = new WebClient();
+                webclient.Encoding = Encoding.UTF8;
+                requests = new Queue<string>();
+                errors = 0;
+            }
+            catch( Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -55,7 +64,7 @@ namespace webTest
                      ds.Name = "Emitir DAS de " + cnpjb;
                     first = true;
                 }
-                else MessageBox.Show("Preencha todos os campos");
+                else Console.WriteLine("Preencha todos os campos");
 
            
         }
@@ -86,40 +95,52 @@ namespace webTest
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (DASpicker.canexit)
-            { ds.Close();
-                DASpicker.canexit = false;
-            }
-            DateTime time = DateTime.Now;
-            numericUpDown1.Maximum = time.Month - 1;
-            label3.Text = string.Format(numboletos, boletosday);
-            if (today != time.Day)
-            {
-                today = time.Day;
-                boletosday = 0;
-            }
-            if (ds != null && !ds.Visible)
-                ds = null;
-            if (!timer2.Enabled &&( !ds.Visible|| ds!=null))
-                timer2.Enabled = true;
-           
-            if(ds!=null&&ds.Visible)
-            {
-                opentime += 1;
-                Console.WriteLine(opentime);
-                if (opentime>1000)
+            try
+            {   if (ds != null)
                 {
-                    ds.erroclose();
-                    opentime = 0;
+                    if (DASpicker.canexit)
+                    {
+                        ds.Close();
+                        DASpicker.canexit = false;
+                    }
+                }
+                DateTime time = DateTime.Now;
+                numericUpDown1.Maximum = time.Month - 1;
+                label3.Text = string.Format(numboletos, boletosday);
+                if (today != time.Day)
+                {
+                    today = time.Day;
+                    boletosday = 0;
+                }
+                if (ds != null && !ds.Visible)
+                    ds = null;
+                if (!timer2.Enabled && (!ds.Visible || ds != null))
+                    timer2.Enabled = true;
+
+                if (ds != null && ds.Visible&&ds.stcount)
+                {
+                    opentime += 1;
+                    if (opentime % 200 == 0) Console.WriteLine("O erro esta com " + opentime);
+                    if (opentime > 2000)
+                    {
+                        ds.erroclose();
+                        opentime = 0;
+                        errors++;
+                    }
                 }
             }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.ToString());
             }
+        }
 
 
 
         private void Server_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Cef.Shutdown();
+            try { Cef.Shutdown(); }
+            catch { };
         }
 
         private void textBox2_KeyDown(object sender, KeyEventArgs e)
@@ -145,12 +166,18 @@ namespace webTest
 
         void initializeCEF()
         {
-            CefSettings settings = new CefSettings();
-            settings.RemoteDebuggingPort = 8088;
-            settings.CachePath = Server.cachepath;
-            // Initialize cef with the provided settings
-            Cef.Initialize(settings);
-
+            try
+            {
+                CefSettings settings = new CefSettings();
+                settings.RemoteDebuggingPort = 8088;
+                settings.CachePath = Server.cachepath;
+                // Initialize cef with the provided settings
+                Cef.Initialize(settings);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         private void textBox1_Enter(object sender, EventArgs e)
@@ -167,66 +194,113 @@ namespace webTest
 
         private async void timer2_Tick(object sender, EventArgs e)
         {
-            if (requests.Count == 0)
-            {
-                try
+            try {
+                if (requests.Count == 0 && (ds == null || ds != null && !ds.Visible))
                 {
-                    string query = webclient.DownloadString(serversite + "/Site/r/requests.txt");
-                    Console.WriteLine(query);
-                    string ex = webclient.DownloadString(serversite + "/Site/r/clean.php");
-                    if (ex == "1") Console.WriteLine("sucess");
-                    foreach (string s in query.Split('|'))
+                    try
                     {
-                        if (!String.IsNullOrEmpty(s)) requests.Enqueue(s);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //((System.Windows.Forms.Timer)sender).Stop();
-                   // Console.WriteLine("nao possui");
-                }
-            }
-            else
-            {
-                if (requests.Count > 0)
-                {
-                    if (ds == null || ds != null && !ds.Visible)
-                    {
-                        string work = requests.Dequeue();
-                        string[] infos = work.Split('?');
-                        var parametres = new System.Collections.Specialized.NameValueCollection();
-                        parametres.Add("servID", "881");
-                        parametres.Add("cnpj", infos[0].Trim());
-                        string tbs = Encoding.UTF8.GetString(webclient.UploadValues(serversite + "/Site/login.php", parametres));
-                        List<int> tts = new List<int>();
-                        int[] finaltab = new int[0];
-                        Console.WriteLine("tbs= " + tbs);
-                        if (tbs.Split('@')[1].Split(',').Length > 0)
+                        if(File.Exists("requests.txt")&&errors==0)
                         {
-                            foreach (string s in tbs.Split('@')[1].Split(','))
+                            StreamReader sr = new StreamReader("requests.txt");
+                            string query = sr.ReadToEnd();
+                            sr.Close();
+                            if(query.Split('|').Length>0)
+                            if (!String.IsNullOrEmpty(query.Split('|')[0]))
                             {
-                                if (!String.IsNullOrEmpty(s)) tts.Add(int.Parse(s));
+                                requests.Enqueue(query.Split('|')[0]);
                             }
-                            finaltab = tts.ToArray();
+                            Console.WriteLine("pegou do requestsavo");
                         }
-                        int[] myrecs = new int[4] { int.Parse(infos[1]), int.Parse(infos[2]), 0, 0 };
-
-                        string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] + "/2018" : infos[3] + "/2018";
-                        Console.WriteLine(infos[0] + "  " + date + "  " + finaltab.Length + "  " + myrecs.Length);
-                        Console.WriteLine(tbs.Split('@')[0]);
-                        ds = null;
-                        ds = new DASpicker(infos[0], date, finaltab, myrecs, first, tbs.Split('@')[0] == "0" ? false : true);
-                        ds.Show();
-                        ds.Name = "Emitir DAS de " + infos[0];
-                        first = true;
-                        timer2.Enabled  =false;
-                        boletosday++;
-                        opentime = 0;
-
+                        else if (File.Exists(reqfile)&&errors==0)
+                        {
+                            string query = webclient.DownloadString(serversite + "/Site/r/requests.txt");
+                            Console.WriteLine(query);
+                            string ex = webclient.DownloadString(serversite + "/Site/r/clean.php");
+                            if (ex == "1") Console.WriteLine("sucess");
+                            
+                            
+                            StreamWriter sw = new StreamWriter(new FileStream("requests.txt",FileMode.OpenOrCreate),UTF8Encoding.UTF8);
+                            string strcopy = "";
+                            foreach (string s in query.Split('|'))
+                            {
+                                if (!String.IsNullOrEmpty(s))
+                                {
+                                    requests.Enqueue(s);
+                                    strcopy += s + "?0|";
+                                }
+                            }
+                            Console.WriteLine("vai escrever assim "+strcopy);
+                            sw.Write(strcopy);
+                            sw.Close();                          
+                        }
+                         else
+                        {
+                            if (errors>0)
+                            {
+                                System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                                this.Close(); //to turn off current app
+                            }
+                        }
+                       
+                               
+                    }
+                    catch (Exception ex)
+                    {
+                        //((System.Windows.Forms.Timer)sender).Stop();
+                        // Console.WriteLine("nao possui");
                     }
                 }
+                else
+                {
+                    if (requests.Count > 0)
+                    {
+                        if (ds == null || ds != null && !ds.Visible)
+                        {
+                            string work = requests.Dequeue();
+                            string[] infos = work.Split('?');
+                            var parametres = new System.Collections.Specialized.NameValueCollection();
+                            parametres.Add("servID", "881");
+                            parametres.Add("cnpj", infos[0].Trim());
+                            string tbs = Encoding.UTF8.GetString(webclient.UploadValues(serversite + "/Site/login.php", parametres));
+                            List<int> tts = new List<int>();
+                            int[] finaltab = new int[0];
+                            Console.WriteLine("tbs= " + tbs);
+                            if (tbs.Split('@')[1].Split(',').Length > 0)
+                            {
+                                foreach (string s in tbs.Split('@')[1].Split(','))
+                                {
+                                    if (!String.IsNullOrEmpty(s)) tts.Add(int.Parse(s));
+                                }
+                                finaltab = tts.ToArray();
+                            }
+                            int[] myrecs = new int[4] { int.Parse(infos[1]), int.Parse(infos[2]), 0, 0 };
+
+                            string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] + "/2018" : infos[3] + "/2018";
+                            Console.WriteLine(infos[0] + "  " + date + "  " + finaltab.Length + "  " + myrecs.Length);
+                            Console.WriteLine(tbs.Split('@')[0]);
+                            ds = null;
+                            ds = new DASpicker(infos[0], date, finaltab, myrecs, first, tbs.Split('@')[0] == "0" ? false : true);
+                            ds.Show();
+                            ds.Name = "Emitir DAS de " + infos[0];
+                            first = true;
+                            timer2.Enabled = false;
+                            boletosday++;
+                            opentime = 0;
+
+                        }
+                    } }
+          
+        }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.ToString());
             }
 
+        }
+        public static  void Restart()
+        {
+            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+            Application.Exit();
         }
 
         string convert(string num)
