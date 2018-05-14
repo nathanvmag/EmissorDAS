@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+			<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>EMITIR DAS - ADMIN</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="" />
+	<meta name="keywords" content="">
+	<meta name="author" content="Nathan Vieira" />
+
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+	<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700' rel='stylesheet' type='text/css'> -->
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="css/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+	
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/md5.js?1"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	<script src="js/jquery.flexslider-min.js"></script>
+	<!-- Google Map -->
+	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js" type="text/javascript"></script>
+	
+	<!-- MAIN JS -->
+	<script src="js/main.js"></script>
+
+	</head>
+	<body id = "body">
+	
+	<div id="fh5co-page">
+	<header id="fh5co-header" role="banner">
+		<div class="container">
+			<div class="row">
+				<div class="header-inner">
+					<h1><a href="index.html">Emissor DAS <span>.</span></a></h1>
+					<nav role="navigation">
+						<ul>
+							<li><a href="index.html" id="s" ></a></li>
+							
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+
+
+	<div id="best-deal">
+		<div class="container">
+			<div class="row" id= "bestrow">			
+
+				
+
+			<div class="col-md-12  text-center fh5co-heading animate-box" data-animate-effect="fadeIn">
+			<h2>Bem vindo ao imposto simples (DAS)</h2>
+			<h3>Para logar entre com seu CNPJ ou Email e sua senha </h3></div>
+			<div class="col-md-12 col-md-push-4 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0" data-animate-effect="fadeIn">
+
+				<div class="row">
+						<div class="col-md-4 ">
+							<div class="form-group">
+								<input id="cnpj" class="form-control" placeholder="CNPJ ou Email" type="text" Value="" name="user">		</div>
+						</div>
+						</div>			
+					<div class="row">
+						<div class="col-md-4 ">
+							<div class="form-group">
+								<input id="pass" class="form-control" placeholder="Senha" type="password" Value="" name="senha">
+							</div>
+						</div>
+										
+					</div>
+				<div class="row">
+					<div class="col-md-2 col-md-push-0 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0" data-animate-effect="fadeIn">
+							<div class="form-group">
+								<a id="pass1" value="Entrar" class="btn btn-primary" onclick="EntrarButton()">Entrar</a>
+							</div>
+						</div>
+						
+					<div class="col-md-2 col-md-push-0 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0" data-animate-effect="fadeIn">
+							<div class="form-group">
+								<a onclick="Esqueceupass()">Esqueci minha senha</a>
+							</div>
+						</div>
+				
+			</div>					
+	</div>
+
+		</div>
+		</div>
+	</div>
+	
+	<footer id="fh5co-footer" role="contentinfo">
+	
+		<div class="container">
+			<div class="col-md-8 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+				<h3>Sobre nós</h3>
+					<p> A EMPRESA BLABLALBAL
+ </p>				
+			</div>
+			
+
+			<div class="col-md-2 col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+<h3>Redes socias</h3>
+				<ul class="fh5co-social">					
+					<li><a  target="_blank" href=""><i class="icon-facebook"></i></a></li>
+					<li><a  target="_blank" href=""><i class="icon-google-plus"></i></a></li>					
+				</ul>
+			</div>
+			
+			<div class="col-md-12 fh5co-copyright text-center">
+				<p><p>&copy; 2018 All Rights Reserved.<span>Desenvolvido por Nathan Vieira de Magalhães <span><a target="_blank" href="https://nathanvmag.github.io"<p>Website </p></a> </p>	
+					
+			</div>
+			
+		</div>
+	</footer>
+	</div>
+
+	</body>
+</html>
+
+<script type="text/javascript">
+	var cnpj;
+	var name1;
+	function EntrarButton()
+	{
+		if(document.getElementById("pass").value!=""&&document.getElementById("cnpj").value!="")
+		{
+			cnpj= document.getElementById("cnpj").value;
+			if (validateEmail(cnpj))
+			{
+				$.post('login.php', { servID: 606,login:cnpj,pass:document.getElementById("pass").value }, function(data) {
+					if (data.length==14)cnpj= data;
+
+				});
+			}
+			if(validarCNPJ){				
+				$.post('login.php', { servID: 593,login:cnpj,pass:document.getElementById("pass").value }, function(data) {
+					if(data=="N")alert("Email ou senha incorretos");
+					else if (data=="Nready")alert("Você digitou a senha correta, porém não está apto a acessar a plataforma de emissão do DAS neste momento, Fale com seu contador");
+					else if (data.substring(0,10)=="changepass"){
+						name1=data.split("|")[1];
+						document.getElementById("bestrow").innerHTML=`<div class="col-md-12  text-center ">
+							<h3>Para efetuar o primeiro login voce deve alterar primeiro sua senha </h3>
+							<div class="col-md-12 col-md-push-4 text-center ">
+							<div class="row">
+									<div class="col-md-4 ">
+										<div class="form-group">
+											<input id="p1" class="form-control" placeholder="Nova Senha" type="password" Value="" name="p1"></div>								</div>
+									</div>			
+								<div class="row">
+									<div class="col-md-4 ">
+										<div class="form-group">
+											<input id="p2" class="form-control" placeholder="Confirmar Senha" type="password" Value="" name="p2">
+										</div>
+									</div>													
+								</div>
+								<div class="row">
+								<div class="col-md-2 >
+										<div class="form-group">
+											<a id="npass" value="Trocar" class="btn btn-primary" onclick="changepass('`+data.split("|")[1]+`')">Trocar Senha</a>
+										</div>
+									</div>
+								</div>
+							</div>`;
+
+					}
+					else if(data.substring(0,1)=="S"){
+						name1=data.split("|")[1];
+						document.getElementById("bestrow").innerHTML=`	<div class="col-md-12  text-center" >
+					<h3 id="bv">Bem vindo `+data.split("|")[1]	+`, selecione aqui sua ação:</h3>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="btn-group btn-group-toggle" data-toggle="buttons">
+							  <label class="btn btn-primary active" ">
+							    <input type="radio" name="options" onchange="MenuOptions(0)" id="option1" autocomplete="off"  checked> Emitir DAS
+							  </label>
+							  <label class="btn btn-primary" onchange="MenuOptions(1)">
+							    <input type="radio" name="options" id="option2"  autocomplete="off"> Consultar Emissões
+							  </label>
+							  <label class="btn btn-primary" onchange="MenuOptions(2)">
+							    <input type="radio" name="options" id="option3" " autocomplete="off"> Solicitar serviços
+							  </label>
+							   <label class="btn btn-primary" onchange="MenuOptions(3)">
+							    <input type="radio" name="options" id="option4"" autocomplete="off"> Ajuda e sugestões
+							  </label>
+							</div>
+						</div>
+					</div>
+					<br><div class="col-md-12" id="menucontent"></div>	`;
+					MenuOptions(0);
+					document.getElementById("s").innerHTML="Sair";
+
+					}
+					else alert("Erro no sistema");
+				});
+			}
+			else alert("Digite um cnpj válido");
+		}
+		else alert("Preencha todos os campos.")
+	}
+		function validateEmail(email) {
+				  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				  return re.test(email);
+				}
+	function Esqueceupass()
+	{
+		document.getElementById("bestrow").innerHTML=`<div class="col-md-12 col-md-push-4 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0" data-animate-effect="fadeIn"><h3> Digite o seu CNPJ</h3>
+			<div class="row">
+							<div class="col-md-4 ">
+								<div class="form-group">
+									<input id="cnpjred" class="form-control" placeholder="CNPJ" type="text" Value="" >
+								</div>
+							</div>
+											
+						</div>
+						<div class="row">
+							<div class="col-md-4 ">
+								<div class="form-group">
+									<button class="btn btn-primary" onclick="resetpass()">Enviar</button>
+								</div>
+							</div>
+											
+						</div>
+						</div>
+						`
+
+	}
+	function resetpass()
+	{
+		cnp= document.getElementById("cnpjred").value;
+		console.log(cnp);
+		$.post('email.php', { servID: 103,cnpj:cnp }, function(data) {
+				console.log(data);
+				if (data=="OK"){alert("Email de senha enviado com sucesso");
+				location.href= location.href;
+			}
+				else alert("Este cnpj não está cadastrado");
+			});
+	}
+	function MenuOptions(idx)
+	{
+		if(idx==0){
+			var d = new Date();
+			var c = d.getMonth();
+			c= c>9?c+"":"0"+c;
+			document.getElementById("menucontent").innerHTML=`<div class="col-md-12  text-center ">
+						<div class="row">
+						<div class="col-md-12 ">
+							<div class="form-group col-md-4 col-sm-push-2">
+								<input id="Pserv" class="form-control" placeholder="Prestação de Serviços" type="text" Value="" onchange="convert(this)" onfocus="fix(this)" name="pserv">	</div>
+								<div class="col-md-4 col-sm-push-2">
+								<input id="Rvend" class="form-control" placeholder="Revenda de produtos" type="text" Value="" onfocus="fix(this)" onchange="convert(this)" name="rvend">
+							</div>
+
+						</div>
+						<div class="col-md-12 ">
+							<div class="form-group col-md-4 col-sm-push-4">
+							 <input type="month" id="mes" name="mes" min="2018-01" max="2018-`+c+`" required>
+							    
+							
+							</div>
+								
+							</div>
+							<div class="col-md-12 ">
+							<div class="form-group col-md-4 col-sm-push-4">
+							 <button class="btn btn-primary" onclick="EmitDas()">Emitir </button>	    
+							
+							</div>								
+							</div>
+						</div>	
+						</div>
+					</div>`;
+		}
+		else if(idx==1){
+			document.getElementById("menucontent").innerHTML=`<h3> Consultar Emissões </h3>`;
+			$.post('login.php', { servID: 183,cnpj:cnpj }, function(data) {
+				console.log(data);
+				if(data!="error")
+				{
+				var inf=data.split("|");
+				if (inf.length>0)
+				{
+					document.getElementById("menucontent").innerHTML=`<div class='col-md-12 text-center col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0' data-animate-effect='fadeIn'> 
+										<div class='form-group' id='reqs' > </div> </div>`;
+
+					for (var i =0;i<inf.length;i++)
+					{
+						if (inf[i]!="")
+						{
+							var infos= inf[i].split("@");
+							if (infos.length>0)
+							{
+
+								var dt= parseInt(infos[0])>9?infos[0]+"/2018":"0"+infos[0]+"/2018";
+									var st= infos[1];
+									var bt= infos[2]==""?"n":infos[2];
+									var pg = infos[3];
+									document.getElementById('reqs').innerHTML+=`<h4> <i class ='icon-calendar'> </i> Mês = `+ dt+ ` &nbsp;&nbsp;&nbsp; <i class ='icon-cloud'> </i>  Status: `+st+` &nbsp;&nbsp;&nbsp; <div id="bbt`+i+`"><i class ='icon-document' > </i>  <a href="#" id ="bb`+i+`" download> Baixar Boleto</a> &nbsp;&nbsp;&nbsp; <i class="icon-money"></i> Pago= <input type="checkbox" id ="payed`+i+`" onchange="save(`+infos[0]+`,`+ ('payed'+i+'')+`,`+cnpj+` )" >&nbsp;&nbsp;&nbsp;
+										 	<a  onclick='recalc(`+infos[0]+`)' > Recalcular</a></div> 	
+										 </span> </h4> <legend>&nbsp;&nbsp;&nbsp; </legend>`;
+
+										 if (bt!="n")
+										 {
+										 	document.getElementById("bb"+i).href=bt;
+											 if(pg=="0")
+											 {
+											 	document.getElementById("payed"+i).checked=false;
+											 }
+											 else document.getElementById("payed"+i).checked=true;
+										 }
+										 else {
+										 	document.getElementById("bbt"+i).innerHTML="";
+										 	
+										 }
+										
+										 
+
+
+
+								
+							}
+						}
+
+
+						} document.getElementById("menucontent").innerHTML+=`<div class="col-md-1 col-md-push-4" data-animate-effect="fadeIn">
+											<button class="btn btn-primary" onclick="MenuOptions(1)">Atualizar</button>
+										</div> `;
+					}
+				}
+				else {
+					document.getElementById("menucontent").innerHTML=`<h3> Não houve nenhuma emissão </h3>`;
+				}
+			});
+		}
+		else if(idx==2){
+			document.getElementById("menucontent").innerHTML=`<h3> Solicitar Serviços </h3> 
+					<ul class= "col-md-12 text-center"  style="list-style-type: none;" >
+				<li><a onclick="solicit(this)" class="btn btn-primary">CND - Certidão Negativa de Débitos </a></li>
+				<li><a onclick="solicit(this)" class="btn btn-primary">Declaração de Faturamento </a></li>
+				<li><a onclick="solicit(this)" class="btn btn-primary">Parcelamento de Divida </a></li>
+				<li><a onclick="solicit(this)" class="btn btn-primary">Alteração ou Baixa de Empresas </a></li>
+				<li><a onclick="solicit(this)" class="btn btn-primary">Preciso Contratar um Funcionário </a></li>
+				<li><a onclick="solicit(this)" class="btn btn-primary">Preciso de Uma Consultoria Gratuita </a></li>
+				<li><a class="btn btn-primary">Outros Assuntos - Enviar na área de ajuda </a></li>
+				</ul>
+
+			`;
+		}
+		else if(idx==3){
+			document.getElementById("menucontent").innerHTML=`<div class="col-md-12 col-md-push-3">
+				<div class="form-group">
+			<div class="col-md-6"><textarea rows="10" cols="30" class="form-control" id ="duvid" placeholder="Escreva aqui sua dúvida:"></textarea>
+			</div>
+			<div class="col-md-10 " ><p><br></p><button class="btn btn-primary" onclick="duvidaclick()" >Enviar</button></div>
+			</div></div>
+`;
+
+		}
+	}
+		function solicit(elem)
+		{
+			console.log(elem.innerHTML);
+			$.post('email.php', { servID: 392,cnpj:cnpj,name:name1,serv:elem.innerHTML }, function(dt) {
+				console.log(dt);
+				if (dt=="OK")alert("Pedido enviado com sucesso");
+			});
+
+		}
+		function recalc(mes)
+		{
+			$.post('login.php', { servID: 926 ,mes:mes,cnpj:cnpj}, function(data) {
+			console.log(data);
+			if (data!="error"){
+			var dts= "ask";
+			var a= data.split("@");
+			var pserv= a[0];
+			var rvend = a[1];
+			$.post('login.php', { servID: 772,rvend:rvend,pserv:pserv,mes:mes,cnpj:cnpj,tt:dts }, function(data) {
+						console.log(data);
+						if(data=="OK")
+						{
+							$.post('login.php', { servID: 912,rprod:rvend,pserv:pserv,mes:mes,cnpj:cnpj,status:"Gerando boleto",pago:"0" }, function(data) {
+								console.log(data);
+								if(data=="OK"){
+						 		alert("Sucesso ao fazer o pedido, Aguarde o resultado na aba Consultar Emissões");
+						 		MenuOptions(1)}
+						 		else alert("Erro no sistema");
+							});
+						}});
+		}});
+		}
+		function duvidaclick()
+		{
+			var duvid= document.getElementById("duvid").value;
+			if (duvid!="")
+			{
+				$.post('email.php', { servID: 939,cnpj:cnpj,name:name1,serv:duvid }, function(dt) {
+				console.log(dt);
+				if (dt=="OK")alert("Dúvida enviada com sucesso");
+				});	
+			}
+			else {
+				alert("Preencha sua dúvida");
+			}
+		}
+		function save(date,pago,cnpj)
+		{
+			console.log(date +" "+pago +" "+cnpj);
+			var pg= pago.checked?"1":"0";
+			console.log(991 +" "+cnpj+" " +pg);
+			$.post('cnpj.php', { servID: 991,cnpj:cnpj,mes:date,pago:pg }, function(dt) {
+				console.log(dt);
+				if(dt!="OK")alert("Erro no sistema");
+
+						});
+		}
+		function changepass(name)
+		{
+			if((document.getElementById("p1").value==document.getElementById("p2").value)&&document.getElementById("p1").value!="" ){
+				console.log("TROCA TROCA");
+				$.post('login.php', { servID: 118,cnpj:cnpj,sen:document.getElementById("p1").value }, function(data) {
+					console.log(data);
+					if (data=="OK"){
+						alert("Senha alterada com sucesso");
+						document.getElementById("bestrow").innerHTML=`	<div class="col-md-12  text-center" >
+					<h3 id="bv">Bem vindo `+name	+`, selecione aqui sua ação:</h3>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="btn-group btn-group-toggle" data-toggle="buttons">
+							  <label class="btn btn-primary active" ">
+							    <input type="radio" name="options" onchange="MenuOptions(0)" id="option1" autocomplete="off"  checked> Emitir DAS
+							  </label>
+							  <label class="btn btn-primary" onchange="MenuOptions(1)">
+							    <input type="radio" name="options" id="option2"  autocomplete="off"> Consultar Emissões
+							  </label>
+							  <label class="btn btn-primary" onchange="MenuOptions(2)">
+							    <input type="radio" name="options" id="option3" " autocomplete="off"> Solicitar serviços
+							  </label>
+							   <label class="btn btn-primary" onchange="MenuOptions(3)">
+							    <input type="radio" name="options" id="option4"" autocomplete="off"> Ajuda e sugestões
+							  </label>
+							</div>
+						</div>
+					</div>
+					<br><div class="col-md-12" id="menucontent"></div>	`;
+					MenuOptions(0);
+					document.getElementById("s").innerHTML="Sair";
+
+
+					}
+					else alert("Erro no sistema");
+
+				});
+			}
+			else alert("As senhas não condizem");
+		}
+		function ShowBoletos(info){
+			var infs = info.split("|");
+			
+			var b = `` ;
+
+			document.getElementById("bestrow").innerHTML += b;
+		}
+		function fix(num)
+		{
+			num.value= num.value.replace(",","");
+		}
+	   function convert(num)
+        {
+            var s = num.value+"";
+
+            if (s.length >= 3) s= s+",00";
+            else s="0," + s;
+            num.value=s;
+        }
+        function EmitDas()
+        {
+        	if(document.getElementById("mes").value.split("-")[1]!=null&&document.getElementById("Pserv").value!=""&&document.getElementById("Rvend").value!=""&&cnpj!=null)
+        	{
+
+        		var rvend= document.getElementById("Rvend").value.replace(",","");
+        		var pserv= document.getElementById("Pserv").value.replace(",","");
+        		var a= true ;
+        		if (parseInt(rvend)+parseInt(pserv)>5000000)
+        		{
+        			a =confirm("Você digitou uma quantia acima do valor de R$: 50.000,00 , você tem certeza que deseja continuar?")
+        		}
+        		if (!isNaN(parseInt(rvend))&&!isNaN(parseInt(rvend))&&a){
+        		var mes = parseInt(document.getElementById("mes").value.split("-")[1]);
+        		$.post('login.php', { servID: "3156",mes:mes,cnpj:cnpj }, function(data) {
+        			console.log(data);
+        			if (data =="OK"||data=="ask")
+        			{
+        				var check= false
+        				if (data=="ask")check = confirm("Já existe uma emissão para essa data, deseja recalcular?");
+        				else check= true ;
+        				if (check){
+        				$.post('login.php', { servID: 772,rvend:rvend,pserv:pserv,mes:mes,cnpj:cnpj,tt:data }, function(data) {
+						console.log(data);
+						if(data=="OK")
+						{
+							$.post('login.php', { servID: 912,rprod:rvend,pserv:pserv,mes:mes,cnpj:cnpj,status:"Gerando boleto",pago:"0" }, function(data) {
+								console.log(data);
+								if(data=="OK"){
+						 		alert("Sucesso ao fazer o pedido, Aguarde o resultado na aba Consultar Emissões");
+						 		MenuOptions(1)}
+						 		else alert("Erro no sistema");
+							});
+						}
+						else if (data=="n")
+						{
+							alert("Preencha os campos corretamente");
+						}
+						else alert("Erro no sistema");
+				
+				});
+        			}
+        		}
+        		else alert("Erro no sistema");
+
+        		});
+        		
+        	}
+        	else alert("Preencha os campos corretamente");
+        }
+        	else alert("Preencha todos os campos!")
+        }
+
+
+	function validarCNPJ(cnpj) {
+ 
+    cnpj = cnpj.replace(/[^\d]+/g,'');
+ 
+    if(cnpj == '') return false;
+     
+    if (cnpj.length != 14)
+        return false;
+ 
+    // Elimina CNPJs invalidos conhecidos
+    if (cnpj == "00000000000000" || 
+        cnpj == "11111111111111" || 
+        cnpj == "22222222222222" || 
+        cnpj == "33333333333333" || 
+        cnpj == "44444444444444" || 
+        cnpj == "55555555555555" || 
+        cnpj == "66666666666666" || 
+        cnpj == "77777777777777" || 
+        cnpj == "88888888888888" || 
+        cnpj == "99999999999999")
+        return false;
+         
+    // Valida DVs
+    tamanho = cnpj.length - 2
+    numeros = cnpj.substring(0,tamanho);
+    digitos = cnpj.substring(tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (i = tamanho; i >= 1; i--) {
+      soma += numeros.charAt(tamanho - i) * pos--;
+      if (pos < 2)
+            pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado != digitos.charAt(0))
+        return false;
+         
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0,tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (i = tamanho; i >= 1; i--) {
+      soma += numeros.charAt(tamanho - i) * pos--;
+      if (pos < 2)
+            pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado != digitos.charAt(1))
+          return false;
+           
+    return true;
+    
+}
+	
+</script>
