@@ -98,21 +98,99 @@ namespace EmissorApp.Droid
                 reqparm1.Add("pass", pass);
                 byte[] responsebytes1 = await wb.UploadValuesTaskAsync(url, "POST", reqparm1);
                 string responsebody1 = Encoding.UTF8.GetString(responsebytes1);
-                l = long.Parse(responsebody1);
+                if (responsebody1 != "N")
+                {
+                    l = long.Parse(responsebody1);
+                }
+                else if (responsebody1 == "error") l = -2;
+                else l = -1;
             }
             Console.WriteLine("hey converti" + l);
 
-                    
-           
+            if (l != -1)
+            {
+                var reqparm = new System.Collections.Specialized.NameValueCollection();
+                reqparm.Add("servID", "593");
+                reqparm.Add("login", l.ToString());
+                reqparm.Add("pass", pass);
+                byte[] responsebytes = wb.UploadValues(url, "POST", reqparm);
+                string responsebody = Encoding.UTF8.GetString(responsebytes);
+                return responsebody + "|" + l;
+            }
+            else if (l == -2)
+                return "error";
+            else return "N";
+        }
+
+        public async Task<string> Recalculate(string site, string cnpj, string mes)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
             var reqparm = new System.Collections.Specialized.NameValueCollection();
-            reqparm.Add("servID","593");
-            reqparm.Add("login", l.ToString());
-            reqparm.Add("pass",pass);
-            byte[] responsebytes = wb.UploadValues(url, "POST", reqparm);
+            reqparm.Add("servID", "926");
+            reqparm.Add("cnpj", cnpj);
+            reqparm.Add("mes", mes);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
-            return responsebody+"|"+l;
+            if (responsebody != "error")
+            {
+                var reqparm1 = new System.Collections.Specialized.NameValueCollection();
+                reqparm1.Add("servID", "772");
+                reqparm1.Add("cnpj", cnpj);
+                reqparm1.Add("mes", mes);
+
+                reqparm1.Add("pserv", responsebody.Split('@')[0]);
+                reqparm1.Add("rvend", responsebody.Split('@')[1]);
+                reqparm1.Add("tt", "ask");
+                byte[] responsebytes1 = await wb.UploadValuesTaskAsync(site, "POST", reqparm1);
+                string responsebody1 = Encoding.UTF8.GetString(responsebytes1);
+                if(responsebody1=="OK")
+                {
+                    var reqparm2 = new System.Collections.Specialized.NameValueCollection();
+                    reqparm2.Add("servID", "912");
+                    reqparm2.Add("cnpj", cnpj);
+                    reqparm2.Add("pserv", responsebody.Split('@')[0]);
+                    reqparm2.Add("mes", mes);
+                    reqparm2.Add("rprod", responsebody.Split('@')[1]);
+                    reqparm2.Add("status", "Gerando boleto");
+                    reqparm2.Add("pago", "0");
+                    byte[] responsebytes2 = await wb.UploadValuesTaskAsync(site, "POST", reqparm2);
+                    string responsebody2 = Encoding.UTF8.GetString(responsebytes2);
+                    if (responsebody2 == "OK") return responsebody2;
+                    else return "error";
+                }
+                else return "error";
+            }
+            else return "error";
 
         }
-        
+
+        public async Task<string> Save(string site, string cnpj, string date, string pg)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "991");
+            reqparm.Add("cnpj", cnpj);            
+            reqparm.Add("mes", date);
+            reqparm.Add("pago", pg);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
+
+        public async Task<string> SolicitarServ(string site, string serv, string cnpj, string name)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "392");
+            reqparm.Add("cnpj", cnpj);
+            reqparm.Add("name", name);
+            reqparm.Add("serv", serv);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
     }
 }

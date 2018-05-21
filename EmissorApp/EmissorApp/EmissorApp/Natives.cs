@@ -12,5 +12,8 @@ namespace EmissorApp
         Task<string> EmitDass(string site ,string rprod,string pserv,string date,string cpnj,string tt);
         Task<string> HasDas(string site, string mes, string cnpj);
         Task<string> GetRequests(string site, string cnpj);
+        Task<string> Save(string site, string cnpj, string date, string pg);
+        Task<string> Recalculate(string site, string cnpj, string mes);
+        Task<string> SolicitarServ(string site, string serv, string cnpj, string name);
     }
 }
