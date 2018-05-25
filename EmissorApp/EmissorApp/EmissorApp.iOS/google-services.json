@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "88472507097",
+    "firebase_url": "https://moveonline-cc162.firebaseio.com",
+    "project_id": "moveonline-cc162",
+    "storage_bucket": "moveonline-cc162.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88472507097:android:d4f6a174a440ae28",
+        "android_client_info": {
+          "package_name": "com.moveonline.emissor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88472507097-dmmhdjvjmvon4eimcnb2mcgba47qoj9q.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "88472507097-dmmhdjvjmvon4eimcnb2mcgba47qoj9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1v9eJKFjIkBzeIWnHmPeNbXge_NPWQFo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

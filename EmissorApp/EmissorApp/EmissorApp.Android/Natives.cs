@@ -10,14 +10,26 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Support.V4.App;
+
 using System.Net;
 using System.Threading.Tasks;
+using Android.Content.Res;
 
 [assembly: Dependency(typeof(Natives))]
 namespace EmissorApp.Droid
 {
     class Natives : INatives
     {
+        public float density()
+        {
+            try
+            {
+                return MainActivity.at;
+            }
+            catch { return 1; }
+        }
+
         public async Task<string> EmitDass(string site,string rprod, string pserv, string date, string cpnj,string tt)
         {
             WebClient wb = new WebClient();
@@ -192,5 +204,6 @@ namespace EmissorApp.Droid
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             return responsebody;
         }
+      
     }
 }
