@@ -56,9 +56,11 @@ namespace EmissorApp
                     string user = Application.Current.Properties["cnpj"].ToString();
                     string pass= Application.Current.Properties["pass"].ToString();
                     string data = await DependencyService.Get<INatives>().Login(localsite + "login.php", user, pass);
-                    if (data == "N")
+                    if (data.Substring(0, 1) == "N")
                     {
-                        alert("Email ou senha incorretos");
+                        alert("Email ou senha foram alterados, por favor entre novamente");
+                        Application.Current.Properties.Remove("cnpj");
+                        Application.Current.Properties.Remove("pass");
                         SplashLayout();
                     }
                     else if (data == "Nready")
@@ -80,7 +82,7 @@ namespace EmissorApp
                         Application.Current.Properties["pass"] = pass;
                     }
                     else {
-                        alert("Erro no sistema");
+                        alert("Erro no sistema "+ data);
                         SplashLayout();
                     }
                 }
@@ -303,7 +305,7 @@ namespace EmissorApp
             select.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
             mpage.Children.Add(lb);
             mpage.Children.Add(select);
-            string[] a = new string[6] { "Emitir", "Consultar", "Serviços Online", "Ajuda e sujestões", "Sobre","Sair" };
+            string[] a = new string[6] { "Emitir", "Consultar", "Serviços Online", "Ajuda e sugestões", "Sobre","Sair" };
             int maior = 0;
             for (int i = 0; i < 1; i++)
             {
