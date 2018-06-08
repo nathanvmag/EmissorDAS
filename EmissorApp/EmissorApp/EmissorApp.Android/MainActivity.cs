@@ -20,6 +20,7 @@ namespace EmissorApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+            StartService(new Android.Content.Intent(this, typeof(Servn)));
             try
             {
                 at = (float)Resources.DisplayMetrics.Density;

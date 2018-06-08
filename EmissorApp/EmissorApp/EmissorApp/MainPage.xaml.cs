@@ -93,14 +93,14 @@ namespace EmissorApp
             }
             else { SplashLayout(); }
             }
-        public async void SplashLayout()
+        public async void SplashLayout(string usert ="")
         {
             StackLayout splash = new StackLayout();
             splash.HorizontalOptions = LayoutOptions.FillAndExpand;
            
             Label lb = new Label() { Text = "Move Online", HorizontalTextAlignment = TextAlignment.Center, HorizontalOptions = LayoutOptions.FillAndExpand
             };
-            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
             lb.BackgroundColor = Color.FromHex("51a279");
             lb.TextColor = Color.White;
             splash.Children.Add(lb);
@@ -111,7 +111,7 @@ namespace EmissorApp
             }
             Entry user = new Entry() { Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.Fill, HorizontalTextAlignment = TextAlignment.Start, Placeholder = "CNPJ ou EMAIL" };
             user.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.8f:1f)* 0.7f;
-
+            user.Text = string.IsNullOrWhiteSpace(usert) ? "" : usert;
             splash.Children.Add(user);
             Entry pass = new Entry() { Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.Fill, HorizontalTextAlignment = TextAlignment.Start, Placeholder = "Senha", IsPassword = true };
             pass.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.8f:1f)* 0.7f;
@@ -168,7 +168,7 @@ namespace EmissorApp
                         if (data.Substring(0,1) == "N")
                         {
                             alert("Email ou senha incorretos");
-                            SplashLayout();
+                            SplashLayout(user.Text);
                         }
                         else if (data.Substring(0,6) == "Nready")
                         {
@@ -179,19 +179,19 @@ namespace EmissorApp
                         }
                         else if (data.Length > 9 && data.Substring(0, 10) == "changepass")
                         {
-                            MPage(data.Split('|')[1]);
+                            showtutorial(data.Split('|')[1]);
                             Application.Current.Properties["cnpj"] = data.Split('|')[2];
                             Application.Current.Properties["pass"] = pass.Text;
                         }
                         else if (data.Substring(0, 1) == "S")
                         {
-                            MPage(data.Split('|')[1]);
+                            showtutorial(data.Split('|')[1]);
                             Application.Current.Properties["cnpj"] = data.Split('|')[2];
                             Application.Current.Properties["pass"] = pass.Text;
                         }
                           else {
                             alert("Erro no sistema");
-                            SplashLayout();
+                            SplashLayout(user.Text) ;
                         }
                     }
                     catch (Exception e)
@@ -211,7 +211,59 @@ namespace EmissorApp
             splash.Children.Add(esq);
             this.Content = splash;
         }
+        void showtutorial(string name)
+        {
+            StackLayout splash = new StackLayout();
+            splash.HorizontalOptions = LayoutOptions.FillAndExpand;
 
+            Label lb = new Label()
+            {
+                Text = "Aprenda a usar",
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
+            lb.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
+            lb.BackgroundColor = Color.FromHex("51a279");
+            lb.TextColor = Color.White;
+            splash.Children.Add(lb);
+            string[] tutos = new string[6] { "Impostos:" + "\n" + " Receba seus impostos em poucos minutos com apenas um click.", "Download de Impostos:" + "\n" + " Consulte seus impostos quando e onde quiser com apenas um click.", "Alertas Para Aviso e lembretes:" + "\n" + " Não esqueça mais de pagar seus impostos, nós lembramos você.", "Atualização de Status e Controle de Impostos:" + "\n" + " Tenha o controle de seus impostos na palma de suas mãos, tudo com apenas um click.", "Calculo de Impostos atrasados:" + "\n" + " Não Perca mais tempo enviando e-mails e ligando para seu contador, no Move online basta apenas um click você recebe seu imposto direto no seu celular e e-mail em questão de minutos.", "Solicitação de Chamados:" + "\n" + " Basta apenas um click pra sabermos o que você precisa." };
+            Label ttx=new Label() { Text = tutos[0], HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
+            int comand = 0;
+            ttx.FontSize*= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+            splash.Children.Add(ttx);
+            for (int i = 0; i < 5; i++)
+            {
+                splash.Children.Add(new Label() { Text = "" });
+            }
+            Button bt2 = new Button()
+            {
+                Text = "Próximo",
+                BackgroundColor = Color.FromHex("51a279"),
+                HorizontalOptions = LayoutOptions.FillAndExpand
+                 , VerticalOptions = LayoutOptions.End,
+                TextColor = Color.White,
+                Margin = new Thickness(20, 0, 20, 0)
+            };
+
+            bt2.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+            bt2.Clicked += delegate
+            {
+                if (comand >= 5) MPage(name);
+                else
+                {
+                    comand++;
+                    ttx.Text = tutos[comand];
+                    if(comand==5)
+                    bt2.Text = "Iniciar";
+                }
+            };
+          /*  Button bt3 = bt2;
+            bt3.Text = "Pular";
+            bt3.Clicked += delegate { Console.WriteLine("hey"); };
+            splash.Children.Add(bt2);
+            */this.Content = splash;
+
+        }
         void alert(string s)
         {
             DisplayAlert("Move Online:", s, "Ok");
@@ -225,7 +277,7 @@ namespace EmissorApp
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
-            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
             lb.BackgroundColor = Color.FromHex("51a279");
             lb.TextColor = Color.White;
             esqpass.Children.Add(lb);
@@ -292,7 +344,7 @@ namespace EmissorApp
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
-            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
             lb.BackgroundColor = Color.FromHex("51a279");
             lb.TextColor = Color.White;
 
@@ -358,7 +410,7 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+                    lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
                     lb.BackgroundColor = Color.FromHex("51a279");
                     lb.TextColor = Color.White;
 
@@ -547,7 +599,7 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+                    lb1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
                     lb1.BackgroundColor = Color.FromHex("51a279");
                     lb1.TextColor = Color.White;
                     mpage1.Children.Add(lb1);
@@ -679,7 +731,7 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb2.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+                    lb2.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
                     lb2.BackgroundColor = Color.FromHex("51a279");
                     lb2.TextColor = Color.White;
                     mpage2.Children.Add(lb2);
@@ -726,7 +778,7 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb3.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.8f;
+                    lb3.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
                     lb3.BackgroundColor = Color.FromHex("51a279");
                     lb3.TextColor = Color.White;
                     mpage3.Children.Add(lb3);
@@ -790,16 +842,19 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb4.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.8f;
+                    lb4.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
                     lb4.BackgroundColor = Color.FromHex("51a279");
                     lb4.TextColor = Color.White;
 
                     Label abt = new Label()
                     {
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        Text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-                        ,
+                        HorizontalTextAlignment = TextAlignment.Start,
+                        Text= @"A Move Online surgiu com o propósito de te ajudar a crescer. Somos uma empresa de contabilidade online especializada em otimização de processos e geração de resultados. 
+"+""+@" Nossos serviços, plataformas e ferramentas são inovadores e altamente tecnológicos. Acreditamos no bom uso da internet como forma de facilitar o dia a dia de empreendedores. Tudo para garantir a saúde financeira do seu negócio. 
+Contratando um dos planos da Move Online você terá uma série de vantagens, entre elas a economia de recursos, maiores resultados, segurança e praticidade nos processos.
+"+""+@"Nossa equipe é altamente treinada e capacitada para oferecer o melhor atendimento, em todas as etapas. Desde a contratação, até a prestação do serviço, mantemos um relacionamento contínuo com os nossos clientes.
+Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfeito. Com a Move Online, a contabilidade da sua empresa fica muito mais fácil."+"\n",
                         Margin = new Thickness(20, 0, 20, 0)
 
                     };
