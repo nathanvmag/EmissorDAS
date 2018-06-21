@@ -85,6 +85,18 @@ namespace EmissorApp.iOS
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             return responsebody;
         }
+        public async Task<string> getfiles(string site, string cnpj, string mes)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "991");
+            reqparm.Add("cnpj", cnpj);
+            reqparm.Add("mes", mes);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
 
         public async Task<string> Login(string url, string login, string pass)
         {

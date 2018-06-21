@@ -33,6 +33,7 @@ namespace EmissorApp.Droid
             CheckTimer = new Timer(
                 (o)=>{
                     DateTime dt = DateTime.Now;
+                    Log.Debug("SERVICEE", "Work");
 
                     day = dt.Day;
                     if(day!=notday&& dt.Hour == 8)

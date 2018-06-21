@@ -15,7 +15,7 @@ namespace EmissorApp
         StackLayout currentLayout;
 
 
-        const string localsite = "http://34.217.45.222/site/";
+        const string localsite = "http://54.190.32.194/site/";
         public float d;
          public  MainPage()
         {
@@ -257,11 +257,11 @@ namespace EmissorApp
                     bt2.Text = "Iniciar";
                 }
             };
-          /*  Button bt3 = bt2;
+            Button bt3 = bt2;
             bt3.Text = "Pular";
             bt3.Clicked += delegate { Console.WriteLine("hey"); };
             splash.Children.Add(bt2);
-            */this.Content = splash;
+            this.Content = splash;
 
         }
         void alert(string s)
@@ -357,7 +357,7 @@ namespace EmissorApp
             select.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
             mpage.Children.Add(lb);
             mpage.Children.Add(select);
-            string[] a = new string[6] { "Emitir", "Consultar", "Serviços Online", "Ajuda e sugestões", "Sobre","Sair" };
+            string[] a = new string[7] { "Emitir", "Consultar", "Serviços Online","Documentos", "Ajuda e sugestões", "Sobre","Sair" };
             int maior = 0;
             for (int i = 0; i < 1; i++)
             {
@@ -769,7 +769,7 @@ After:
                     sw1.Content = mpage2;
                     this.Content = sw1;
                     break;
-                case 3:
+                case 4:
                     ScrollView sw2 = new ScrollView();
                     StackLayout mpage3 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
                     Label lb3 = new Label()
@@ -833,7 +833,7 @@ After:
                     mpage3.Children.Add(btv2);
                     this.Content = sw2;
                     break;
-                case 4:
+                case 5:
                     ScrollView swv = new ScrollView();
                     StackLayout mpage4 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
                     Label lb4 = new Label()
@@ -895,12 +895,112 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
                     this.Content = swv;
 
                     break;
-                case 5:
+                case 6:
                     Application.Current.Properties.Remove("cnpj");
                     Application.Current.Properties.Remove("pass");
                     SplashLayout();
                     break;
+                case 3:
+                    ScrollView sw3 = new ScrollView();
+                    StackLayout mpage7 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+                    Label lb7 = new Label()
+                    {
+                        Text = "Move Online",
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        HorizontalOptions = LayoutOptions.FillAndExpand
+                    };
+                    lb7.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
+                    lb7.BackgroundColor = Color.FromHex("51a279");
+                    lb7.TextColor = Color.White;
+                    mpage7.Children.Add(lb7);
+                    mpage7.Children.Add(new Label() { Text = "Selecione o mês desejado para visualizar os documentos", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb7.FontSize * 0.5f });
+                    Picker date2 = new Picker()
+                    {
+                        Title = "Selecione o mês",
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        Margin = new Thickness(20, 0, 20, 0)
+                       ,
+                        TextColor = Color.FromHex("51a279")
+
+                    }; List<string> meses2 = new List<string>();
+                    for (int i = 1; i < DateTime.Now.Month; i++)
+                        meses2.Add(i > 9 ? i + "/2018" : "0" + i + "/2018");
+                    foreach (string s in meses2) date2.Items.Add(s);
+                    mpage7.Children.Add(date2);
+                    Label tit = new Label() { Text = "", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb7.FontSize * 0.3f };
+                    mpage7.Children.Add(tit);
+                   
+                   
+                    date2.SelectedIndexChanged += async delegate
+                     {
+                         tit.Text = "Exibindo documentos do mes " + date2.SelectedItem.ToString();
+                         View todelete= null ;
+                         foreach (View v in mpage7.Children) if (v.ClassId == "tmp") todelete = v;
+                         if (todelete != null) mpage7.Children.Remove(todelete);
+                         StackLayout tmp = new StackLayout
+                         {
+                             ClassId = "tmp"
+                         };                        
+
+                         string resu = await DependencyService.Get<INatives>().getfiles(localsite + "files.php", Application.Current.Properties["cnpj"].ToString(), date2.SelectedIndex + 1 + "");
+
+                         if (resu.Split('|').Length>0&&resu!="n"&&!string.IsNullOrWhiteSpace(resu))
+                             {
+                             for (int i = 0; i < resu.Split('|').Length; i++)
+                             {
+                                 if (!string.IsNullOrWhiteSpace(resu.Split('|')[i]))
+                                 {
+                                     Label docs = new Label() { Text = "", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb7.FontSize * 0.5f, TextColor = Color.FromHex("51a279") };
+                                     docs.Text = resu.Split('|')[i];
+                                     TapGestureRecognizer tp = new TapGestureRecognizer();
+                                     docs.ClassId = docs.Text + "|" + (date2.SelectedIndex + 1);
+                                     tp.Tapped += Tp_Tapped;
+                                     
+                                     docs.GestureRecognizers.Add(tp);
+                                     tmp.Children.Add( docs);
+                                 }
+                             }
+                         }
+                         else if (resu =="error")
+                         {
+                             alert("Erro no sistema");
+                         }
+                         else
+                             {
+                             Label docs = new Label() { Text = "", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb7.FontSize * 0.4f };
+                             docs.Text = "Nenhum documento carregado para este mês";
+                             tmp.Children.Add( docs);
+
+                         }
+                         mpage7.Children.Insert(mpage7.Children.Count-3, tmp);
+                     };
+                    for (int i = 0; i < 2; i++) mpage7.Children.Add(new Label() { Text = "" });
+
+                    Button btv4 = new Button()
+                    {
+                        Text = "Voltar",
+                        BackgroundColor = Color.FromHex("51a279"),
+                        HorizontalOptions = LayoutOptions.FillAndExpand
+                ,
+                        TextColor = Color.White,
+                        Margin = new Thickness(20, 0, 20, 0)
+                    };
+
+                    btv4.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                    btv4.Clicked += delegate { MPage(name); };
+                    mpage7.Children.Add(btv4);
+                    sw3.Content = mpage7;
+                    this.Content = sw3;
+                    break;
             }
+        }
+
+        private void Tp_Tapped(object sender, EventArgs e)
+        {
+            string[] a = ((Label)sender).ClassId.Split('|');
+            
+         Device.OpenUri(new Uri(localsite + "docss/" + Application.Current.Properties["cnpj"].ToString() + "/" + a[1] + "/" +a[0]));
+                  
         }
 
         private async void Btn_Clicked(object sender, EventArgs e,string name )
