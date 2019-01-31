@@ -44,6 +44,7 @@ namespace webTest
         System.Windows.Forms.Timer t;
         public bool stcount;
         public bool one,tsair,stdown,sucess;
+        int errorCounts = 0;
         public DASpicker(string cnpjj, string data, int[] tab, int[] recs, bool initialized, bool c2)
         {
             int counter = 0;
@@ -82,8 +83,8 @@ namespace webTest
             tempcounter = counter + 1;
             c = 0;
             t = new System.Windows.Forms.Timer();
-            t.Tick += T_Tick;                           
-                       
+            t.Tick += T_Tick;
+            errorCounts = 0;
             t.Interval = 10000;
            t.Enabled = true;
             dcount = 0;
@@ -99,8 +100,13 @@ namespace webTest
                 if (counter != tempcounter) tempcounter = counter;
                 else
                 {
+                    errorCounts++;
                     RestartALL();
                     Console.WriteLine("Pelo contador");
+                   if (errorCounts==120)
+                    {
+                        erroclose();
+                    }
                 }
             }
         }
@@ -201,12 +207,30 @@ namespace webTest
                                 {
                                     jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
 
+                                    if (cnpj == "27124625000111")
+                                    {
+                                        Console.WriteLine("tentou" + cnpj);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel').value=\'" + cnpj + "\'; ");
+                                        await Task.Delay(2000);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formRespLegal')");
+                                        if (jr.Success)
+                                        {
+                                            Console.WriteLine("loguei");
+                                            logado = true;
+                                            counter = 2;
+                                            completeTask = false;
+                                            loguei = chromeBrowser.EvaluateScriptAsync("window.location.href = 'https://cav.receita.fazenda.gov.br/ecac/Aplicacao.aspx?id=10009&origem=menu';").ContinueWith(task => completeTask = true);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("tentou" + cnpj);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                                        await Task.Delay(2000);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
 
-                                    Console.WriteLine("tentou" + cnpj);
-                                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
-                                    await Task.Delay(2000);
+                                    }
 
-                                    jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
                                     Console.WriteLine("aqui1");
                                     counter++;
 
@@ -215,13 +239,23 @@ namespace webTest
                                 {
 
                                     jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
+                                    if (cnpj == "27124625000111")
+                                    {
+                                        Console.WriteLine("tentou segundo " + cnpj);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel').value=\'" + cnpj + "\'; ");
+                                        await Task.Delay(2000);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formRespLegal')");
 
-                                    Console.WriteLine("tentou" + cnpj);
-                                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
-                                    await Task.Delay(2000);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("tentou" + cnpj);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                                        await Task.Delay(2000);
+                                        jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
 
+                                    }
 
-                                    jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
                                     Console.WriteLine("aqui2");
                                     if (jr.Success)
                                     {
@@ -240,11 +274,23 @@ namespace webTest
                             else
                             {
                                 jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('btnPerfil').click()");
-                                Console.WriteLine("tentou " + cnpj);
-                                jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
-                                await Task.Delay(2000);
+                                if (cnpj == "27124625000111")
+                                {
+                                    Console.WriteLine("tentou segundo " + cnpj);
+                                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel').value=\'" + cnpj + "\'; ");
+                                    await Task.Delay(2000);
+                                    jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formRespLegal');");
 
-                                jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("tentou " + cnpj);
+                                    jr = await chromeBrowser.EvaluateScriptAsync("document.getElementById('txtNIPapel2').value=\'" + cnpj + "\'; ");
+                                    await Task.Delay(2000);
+                                    jr = await chromeBrowser.EvaluateScriptAsync("enviaDados('formPJ')");
+
+                                }
+
                                 if (jr.Success) fixstart();
                             }
                             if (comecadas)
@@ -589,6 +635,12 @@ namespace webTest
                             parametres.Add("servID", "356");
                             parametres.Add("cnpj", cnpj);
                             parametres.Add("mes", int.Parse(DATA.Split('/')[0]) + "");
+                            string tempfile  = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"das\" + Server.ds.cnpj + @"\" + Server.ds.DATA.Split('/')[0] + @"\temp.pdf");
+                            if (File.Exists(tempfile))
+                            {
+                                parametres.Add("tempfile", tempfile);
+                            }
+
                             string tbs = Encoding.UTF8.GetString(webclient.UploadValues(Server.serversite + "/Site/login.php", parametres));
                             Console.WriteLine("Resultado do erro : " + tbs);
                         }
@@ -748,7 +800,13 @@ namespace webTest
                 using (callback)
                 {
                     file1 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"das\" + Server.ds.cnpj + @"\" + Server.ds.DATA.Split('/')[0] + @"\boleto.pdf");
-                    if (File.Exists(file1)) File.Delete(file1);
+                    if (File.Exists(file1))
+                    {
+                        if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"das\" + Server.ds.cnpj + @"\" + Server.ds.DATA.Split('/')[0] + @"\temp.pdf"))) File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"das\" + Server.ds.cnpj + @"\" + Server.ds.DATA.Split('/')[0] + @"\temp.pdf"));
+                        File.Move(file1, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"das\" + Server.ds.cnpj + @"\" + Server.ds.DATA.Split('/')[0] + @"\temp.pdf"));
+                       // File.Delete(file1);
+
+                    }
                     callback.Continue(file1, showDialog: false);
                     Console.WriteLine("comeceu " + file1);
                     Server.ds.comecadas = false;

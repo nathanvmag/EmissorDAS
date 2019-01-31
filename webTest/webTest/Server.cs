@@ -24,7 +24,7 @@ namespace webTest
         WebClient webclient;
         public static DASpicker ds;
         public static Queue<string> requests;
-        public const string serversite = "http://localhost";
+        public const string serversite = "https://moveonline.com.br";
         float opentime;
         string reqfile = @"C:\xampp\htdocs\Site\r\requests.txt";
         public static int errors;
@@ -213,9 +213,9 @@ namespace webTest
                         }
                         else if (File.Exists(reqfile)&&errors==0)
                         {
-                            string query = webclient.DownloadString(serversite + "/Site/r/requests.txt");
+                            string query = webclient.DownloadString(serversite + "/site/r/requests.txt");
                             Console.WriteLine(query);
-                            string ex = webclient.DownloadString(serversite + "/Site/r/clean.php");
+                            string ex = webclient.DownloadString(serversite + "/site/r/clean.php");
                             if (ex == "1") Console.WriteLine("sucess");
                             
                             
@@ -261,7 +261,7 @@ namespace webTest
                             var parametres = new System.Collections.Specialized.NameValueCollection();
                             parametres.Add("servID", "881");
                             parametres.Add("cnpj", infos[0].Trim());
-                            string tbs = Encoding.UTF8.GetString(webclient.UploadValues(serversite + "/Site/login.php", parametres));
+                            string tbs = Encoding.UTF8.GetString(webclient.UploadValues(serversite + "/site/login.php", parametres));
                             List<int> tts = new List<int>();
                             int[] finaltab = new int[0];
                             Console.WriteLine("tbs= " + tbs);

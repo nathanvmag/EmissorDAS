@@ -193,8 +193,15 @@ if(isset($_POST['servID']))
 		{
 			$cnpj=$_POST['cnpj'];			
 			$mes=$_POST['mes'];
+
 			$connect = new mysqli(SERVERNAME,USERNAME,DBPASS,DBNAME);
 			mysqli_set_charset($connect,"utf8") or die(mysqli_error($connect));
+			$sql2="";
+			if (isset($_POST['tempfile']))
+			{
+				$sql2= "UPDATE `emissoes` SET `status`='Erro, mostrando boleto anterior',`boleto`='$tempfile' WHERE `cnpj`='$cnpj' AND `mes`= '$mes'";
+			}
+			else
 			$sql2 = "UPDATE `emissoes` SET `status`='Erro, tente emitir novamente ou contate o corretor' WHERE `cnpj`='$cnpj' AND `mes`= '$mes'";
 			mysqli_query($connect, $sql2) or die(mysqli_error($connect)); 
 			$today = getdate();

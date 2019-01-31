@@ -7,6 +7,8 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Net;
+using System.Net.Security;
 
 namespace EmissorApp
 {
@@ -15,25 +17,26 @@ namespace EmissorApp
         StackLayout currentLayout;
 
 
-        const string localsite = "http://54.190.32.194/site/";
+        const string localsite = "https://moveonline.com.br/site/";
         public float d;
          public  MainPage()
         {
             InitializeComponent();
+            InitiateSSLTrust();
             currentLayout = new StackLayout();
             currentLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
             this.Content = currentLayout;
             // SplashLayout();
              this.Padding = new Thickness(0, Device.RuntimePlatform == Device.iOS ? 20 : 0, 0, 5);
             splashscreen();
+
             // MPage();/
            // checklogin();
             }
         async void splashscreen()
         {
-            Image a = new Image() { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, Source = ImageSource.FromFile("splash.png"), Aspect = Aspect.AspectFit };
-            
-            
+            Image a = new Image() { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, Source = ImageSource.FromFile("splash.jpg"), Aspect = Aspect.AspectFit };
+                      
             this.Content = new StackLayout()
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -46,6 +49,22 @@ namespace EmissorApp
              d = (int)DependencyService.Get<INatives>().density();
             checklogin();
             
+        }
+        async void tutorialimage(string name )
+        {
+            Image a = new Image() { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, Source = ImageSource.FromFile("movetutorial.jpeg"), Aspect = Aspect.AspectFit };
+
+            this.Content = new StackLayout()
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Children ={
+                   a
+                }
+            };
+            await Task.Delay(7000);
+            MPage(name);
+
         }
         async void checklogin()
             {
@@ -196,7 +215,7 @@ namespace EmissorApp
                     }
                     catch (Exception e)
                     {
-                        alert("Error + " + e.ToString());
+                        alert("Error + "+ localsite+" "+ e.ToString());
                     }
                 }
                 else alert("Preencha todos os campos");
@@ -213,6 +232,7 @@ namespace EmissorApp
         }
         void showtutorial(string name)
         {
+            /*
             StackLayout splash = new StackLayout();
             splash.HorizontalOptions = LayoutOptions.FillAndExpand;
 
@@ -261,7 +281,8 @@ namespace EmissorApp
             bt3.Text = "Pular";
             bt3.Clicked += delegate { Console.WriteLine("hey"); };
             splash.Children.Add(bt2);
-            this.Content = splash;
+            this.Content = splash;*/
+            tutorialimage(name);
 
         }
         void alert(string s)
@@ -357,7 +378,7 @@ namespace EmissorApp
             select.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
             mpage.Children.Add(lb);
             mpage.Children.Add(select);
-            string[] a = new string[7] { "Emitir", "Consultar", "Serviços Online","Documentos", "Ajuda e sugestões", "Sobre","Sair" };
+            string[] a = new string[8] { "Imposto", "Consulta", "Serviços Online","Documentos", "Ajuda e sugestões", "Sobre","Como usar","Sair" };
             int maior = 0;
             for (int i = 0; i < 1; i++)
             {
@@ -495,8 +516,8 @@ After:
                     {
                         mpage.Children.Add(new Label() { Text = "" });
                     }
-                    for (int i = 1; i < DateTime.Now.Month; i++)
-                        meses.Add(i > 9 ? i + "/2018" : "0" + i + "/2018");
+                    for (int i = 1; i < DateTime.Now.Month+1; i++)
+                        meses.Add(i > 9 ? i + ("/"+DateTime.Now.Year.ToString()) : "0" + i + ("/"+DateTime.Now.Year.ToString()));
                     foreach (string s in meses) date.Items.Add(s);
 
                     mpage.Children.Add(date);
@@ -623,7 +644,7 @@ After:
 
                         Label mes = new Label()
                         {
-                            Text = "Mês = " + ((int.Parse(rqs[i].Split('@')[0]) > 9) ? int.Parse(rqs[i].Split('@')[0]) + "/2018" : 0 + int.Parse(rqs[i].Split('@')[0]) + "/2018"),
+                            Text = "Mês = " + ((int.Parse(rqs[i].Split('@')[0]) > 9) ? int.Parse(rqs[i].Split('@')[0]) + ("/"+DateTime.Now.Year.ToString()) : 0 + int.Parse(rqs[i].Split('@')[0]) + ("/"+DateTime.Now.Year.ToString())),
                             HorizontalOptions = LayoutOptions.CenterAndExpand,
                             HorizontalTextAlignment = TextAlignment.Center,
                             Margin = new Thickness(20, 0, 20, 0)
@@ -896,6 +917,9 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
 
                     break;
                 case 6:
+                    showtutorial(name);
+                    break;
+                case 7:
                     Application.Current.Properties.Remove("cnpj");
                     Application.Current.Properties.Remove("pass");
                     SplashLayout();
@@ -924,7 +948,7 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
 
                     }; List<string> meses2 = new List<string>();
                     for (int i = 1; i < DateTime.Now.Month; i++)
-                        meses2.Add(i > 9 ? i + "/2018" : "0" + i + "/2018");
+                        meses2.Add(i > 9 ? i + ("/"+DateTime.Now.Year.ToString()) : "0" + i + ("/"+DateTime.Now.Year.ToString()));
                     foreach (string s in meses2) date2.Items.Add(s);
                     mpage7.Children.Add(date2);
                     Label tit = new Label() { Text = "", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb7.FontSize * 0.3f };
@@ -1016,7 +1040,7 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
 
         private async void Bolet1_Clicked(object sender, EventArgs e, string name, int pg)
         {
-            if (await DisplayAlert("Move Online", "Você tem certeza que deseja recalcular a competência do mês " + (int.Parse(((Button)sender).ClassId) > 9 ? ((Button)sender).ClassId + "/2018" : "0" + ((Button)sender).ClassId + "/2018"), "Sim", "Não"))
+            if (await DisplayAlert("Move Online", "Você tem certeza que deseja recalcular a competência do mês " + (int.Parse(((Button)sender).ClassId) > 9 ? ((Button)sender).ClassId + ("/"+DateTime.Now.Year.ToString()) : "0" + ((Button)sender).ClassId + ("/"+DateTime.Now.Year.ToString())), "Sim", "Não"))
                 { 
                 string resu = await DependencyService.Get<INatives>().Recalculate(localsite + "login.php", Application.Current.Properties["cnpj"].ToString(), ((Button)sender).ClassId);
                 if (resu == "OK") alert("Sucesso ao recalcular");
@@ -1058,6 +1082,22 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
                 }
             }
             return s;
+        }
+        public  void InitiateSSLTrust()
+        {
+            try
+            {
+                //Change SSL checks so that all checks pass
+                ServicePointManager.ServerCertificateValidationCallback =
+                   new RemoteCertificateValidationCallback(
+                        delegate
+                        { return true; }
+                    );
+            }
+            catch (Exception ex)
+            {
+                alert(ex.ToString());
+            }
         }
 
     }

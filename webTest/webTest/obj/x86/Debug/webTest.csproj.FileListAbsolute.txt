@@ -269,7 +269,6 @@ D:\GitHub\EmissorDAS\webTest\webTest\bin\x86\Debug\CefSharp.WinForms.XML
 D:\GitHub\EmissorDAS\webTest\webTest\bin\x86\Debug\Emissordas.exe.config
 D:\GitHub\EmissorDAS\webTest\webTest\bin\x86\Debug\Emissordas.exe
 D:\GitHub\EmissorDAS\webTest\webTest\bin\x86\Debug\Emissordas.pdb
-D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.csprojAssemblyReference.cache
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.DASpicker.resources
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\Emissordas.Properties.Resources.resources
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.Server.resources
@@ -277,3 +276,4 @@ D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.csproj.GenerateResour
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.csproj.CoreCompileInputs.cache
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\Emissordas.exe
 D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\Emissordas.pdb
+D:\GitHub\EmissorDAS\webTest\webTest\obj\x86\Debug\webTest.csprojAssemblyReference.cache
