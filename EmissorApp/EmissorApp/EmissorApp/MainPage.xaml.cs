@@ -947,7 +947,7 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
                         TextColor = Color.FromHex("51a279")
 
                     }; List<string> meses2 = new List<string>();
-                    for (int i = 1; i < DateTime.Now.Month; i++)
+                    for (int i = 1; i < DateTime.Now.Month+1; i++)
                         meses2.Add(i > 9 ? i + ("/"+DateTime.Now.Year.ToString()) : "0" + i + ("/"+DateTime.Now.Year.ToString()));
                     foreach (string s in meses2) date2.Items.Add(s);
                     mpage7.Children.Add(date2);
