@@ -17166,3 +17166,4 @@
 [0821/222214.065:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot read property 'click' of undefined", source: about:blank (1)
 [0821/222214.096:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot set property 'target' of undefined", source: about:blank (1)
 [0821/222214.100:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot read property 'click' of undefined", source: about:blank (1)
+[0301/111637.610:ERROR:browser_gpu_channel_host_factory.cc(107)] Failed to launch GPU process.

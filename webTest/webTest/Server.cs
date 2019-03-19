@@ -56,7 +56,7 @@ namespace webTest
                 if (cnpjbox.Text != "" && textBox1.Text != "" && textBox2.Text != "")
                 {
                     string cnpjb = cnpjbox.Text;
-                    string date = numericUpDown1.Value < 10 ? "0" + numericUpDown1.Value + "/2018" : numericUpDown1.Value + "/2018";
+                    string date = numericUpDown1.Value < 10 ? "0" + numericUpDown1.Value +"/"+DateTime.Now.Year : numericUpDown1.Value +"/"+DateTime.Now.Year;
                     int[] recs = new int[4] { int.Parse(textBox1.Text.Replace(",","")), int.Parse(textBox2.Text.Replace(",", "")), 0, 0 };
                     ds = null;
                     ds = new DASpicker(cnpjb, date, new int[2] {0,23}, recs,first,true);
@@ -274,8 +274,7 @@ namespace webTest
                                 finaltab = tts.ToArray();
                             }
                             int[] myrecs = new int[4] { int.Parse(infos[1]), int.Parse(infos[2]), 0, 0 };
-
-                            string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] + "/2018" : infos[3] + "/2018";
+                            string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] +"/"+DateTime.Now.Year : infos[3] +"/"+DateTime.Now.Year;
                             Console.WriteLine(infos[0] + "  " + date + "  " + finaltab.Length + "  " + myrecs.Length);
                             Console.WriteLine(tbs.Split('@')[0]);
                             ds = null;
