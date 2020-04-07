@@ -34,13 +34,14 @@ namespace webTest
             {
                 InitializeComponent();
                 initializeCEF();
+                requests = new Queue<string>();
+
                 first = false;
                 cnpjbox.Text = "27124625000111";
                 textBox1.Text = "0";
                 textBox2.Text = "0";
                 webclient = new WebClient();
                 webclient.Encoding = Encoding.UTF8;
-                requests = new Queue<string>();
                 errors = 0;
             }
             catch( Exception e)
@@ -56,8 +57,10 @@ namespace webTest
                 if (cnpjbox.Text != "" && textBox1.Text != "" && textBox2.Text != "")
                 {
                     string cnpjb = cnpjbox.Text;
-                    string date = numericUpDown1.Value < 10 ? "0" + numericUpDown1.Value +"/"+DateTime.Now.Year : numericUpDown1.Value +"/"+DateTime.Now.Year;
-                    int[] recs = new int[4] { int.Parse(textBox1.Text.Replace(",","")), int.Parse(textBox2.Text.Replace(",", "")), 0, 0 };
+
+                    int Year = DateTime.Now.Month < (numericUpDown1.Value) ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+                    string date = numericUpDown1.Value < 10 ? "0" + numericUpDown1.Value +"/"+Year : numericUpDown1.Value +"/"+Year;
+                    float[] recs = new float[4] { float.Parse(textBox1.Text.Replace(",","")), float.Parse(textBox2.Text.Replace(",", "")), 0, 0 };
                     ds = null;
                     ds = new DASpicker(cnpjb, date, new int[2] {0,23}, recs,first,true);
                     ds.Show();
@@ -195,7 +198,8 @@ namespace webTest
         private async void timer2_Tick(object sender, EventArgs e)
         {
             try {
-                if (requests.Count == 0 && (ds == null || ds != null && !ds.Visible))
+                Console.WriteLine((requests == null).ToString() + "  " + (ds == null).ToString());
+                if (requests.Count == 0 && (ds == null || (ds != null && !ds.Visible)))
                 {
                     try
                     {
@@ -216,8 +220,7 @@ namespace webTest
                             string query = webclient.DownloadString(serversite + "/site/r/requests.txt");
                             Console.WriteLine(query);
                             string ex = webclient.DownloadString(serversite + "/site/r/clean.php");
-                            if (ex == "1") Console.WriteLine("sucess");
-                            
+                            if (ex == "1") Console.WriteLine("sucess");                            
                             
                             StreamWriter sw = new StreamWriter(new FileStream("requests.txt",FileMode.OpenOrCreate),UTF8Encoding.UTF8);
                             string strcopy = "";
@@ -273,8 +276,9 @@ namespace webTest
                                 }
                                 finaltab = tts.ToArray();
                             }
-                            int[] myrecs = new int[4] { int.Parse(infos[1]), int.Parse(infos[2]), 0, 0 };
-                            string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] +"/"+DateTime.Now.Year : infos[3] +"/"+DateTime.Now.Year;
+                            float[] myrecs = new float[4] { float.Parse(infos[1]), float.Parse(infos[2]), 0, 0 };
+                            int Year = DateTime.Now.Month< int.Parse(infos[3]) ?  DateTime.Now.Year-1: DateTime.Now.Year;
+                            string date = int.Parse(infos[3]) < 10 ? "0" + infos[3] +"/"+ Year : infos[3] +"/"+Year;
                             Console.WriteLine(infos[0] + "  " + date + "  " + finaltab.Length + "  " + myrecs.Length);
                             Console.WriteLine(tbs.Split('@')[0]);
                             ds = null;

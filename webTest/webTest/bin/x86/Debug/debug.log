@@ -17167,3 +17167,13 @@
 [0821/222214.096:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot set property 'target' of undefined", source: about:blank (1)
 [0821/222214.100:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot read property 'click' of undefined", source: about:blank (1)
 [0301/111637.610:ERROR:browser_gpu_channel_host_factory.cc(107)] Failed to launch GPU process.
+[0628/085826.600:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(71,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(94,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[0628/085830.050:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot read property 'click' of null", source: about:blank (1)
+[0628/085830.061:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot set property 'value' of null", source: about:blank (1)
+[0628/085832.235:INFO:CONSOLE(1)] "Uncaught ReferenceError: enviaDados is not defined", source: about:blank (1)
+[0628/085832.246:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot read property 'click' of null", source: about:blank (1)
+[0628/085832.248:INFO:CONSOLE(1)] "Uncaught TypeError: Cannot set property 'value' of null", source: about:blank (1)
+[0628/085834.261:INFO:CONSOLE(1)] "Uncaught ReferenceError: enviaDados is not defined", source: about:blank (1)

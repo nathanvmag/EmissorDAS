@@ -20,6 +20,9 @@ namespace EmissorApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+            Rg.Plugins.Popup.Popup.Init(this, bundle);
+            
+           
             StartService(new Android.Content.Intent(this, typeof(Servn)));
             try
             {

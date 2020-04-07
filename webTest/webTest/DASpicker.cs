@@ -29,7 +29,7 @@ namespace webTest
         bool completeTask = false;
         Task loguei;
         Task Completetask;
-        int[] receitas;
+        float[] receitas;
         public string DATA;
         int[] Tabela;
         bool fix;
@@ -45,7 +45,7 @@ namespace webTest
         public bool stcount;
         public bool one,tsair,stdown,sucess;
         int errorCounts = 0;
-        public DASpicker(string cnpjj, string data, int[] tab, int[] recs, bool initialized, bool c2)
+        public DASpicker(string cnpjj, string data, int[] tab, float[] recs, bool initialized, bool c2)
         {
             int counter = 0;
             logado = false;
@@ -53,7 +53,7 @@ namespace webTest
             myadress = "";
             comecadas = new bool();
             completeTask = false;
-            receitas = new int[0] { };
+            receitas = new float[0] { };
             DATA = "";
             Tabela = new int[0] { };
             fix = new bool();
@@ -333,7 +333,7 @@ namespace webTest
         }
 
 
-        async void GetDas(int count, string data, int[] tabela, int receita1, int receita2, int receita3, int receita4, bool coucomp)
+        async void GetDas(int count, string data, int[] tabela, float receita1, float receita2, float receita3, float receita4, bool coucomp)
         {
             try
             {

@@ -192,7 +192,7 @@ namespace EmissorApp.iOS
             return responsebody;
         }
 
-        public async Task<string> SolicitarServ(string site, string serv, string cnpj, string name)
+        public async Task<string> SolicitarServ(string site, string serv, string cnpj, string name,string descri)
         {
             WebClient wb = new WebClient();
             wb.Encoding = Encoding.UTF8;
@@ -201,6 +201,29 @@ namespace EmissorApp.iOS
             reqparm.Add("cnpj", cnpj);
             reqparm.Add("name", name);
             reqparm.Add("serv", serv);
+            reqparm.Add("desc", descri);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
+        public async Task<string> getChamadosAsync(string site, string cnpj)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "8801");
+            reqparm.Add("cnpj", cnpj);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
+        public async Task<string> encerrarChamadoAsync(string site, string id)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "8802");
+            reqparm.Add("id", id);
             byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             return responsebody;

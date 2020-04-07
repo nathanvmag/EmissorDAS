@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using System.Net;
 using System.Net.Security;
+using Rg.Plugins.Popup.Services;
 
 namespace EmissorApp
 {
@@ -114,6 +115,7 @@ namespace EmissorApp
             }
         public async void SplashLayout(string usert ="")
         {
+            //var result = await Plugin.DialogKit.CrossDiaglogKit.Current.GetInputTextAsync("New Title", "Type something:");
             StackLayout splash = new StackLayout();
             splash.HorizontalOptions = LayoutOptions.FillAndExpand;
            
@@ -357,54 +359,113 @@ namespace EmissorApp
         async void MPage(string name)
         {
             ScrollView sv = new ScrollView();
-
-            StackLayout mpage = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
-            Label lb = new Label()
+            if (!Application.Current.Properties.ContainsKey("aceitatermos"))
             {
-                Text = "Move Online",
-                HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand
-            };
-            lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
-            lb.BackgroundColor = Color.FromHex("51a279");
-            lb.TextColor = Color.White;
-
-            Label select = new Label()
-            {
-                Text = "Bem vindo "+name +"\nSelecione uma ação: ",
-                HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
-            };
-            select.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-            mpage.Children.Add(lb);
-            mpage.Children.Add(select);
-            string[] a = new string[8] { "Imposto", "Consulta", "Serviços Online","Documentos", "Ajuda e sugestões", "Sobre","Como usar","Sair" };
-            int maior = 0;
-            for (int i = 0; i < 1; i++)
-            {
-                mpage.Children.Add(new Label() { Text = "" });
-            }
-            for (int i = 0; i < a.Length; i++)
-            {
-
-                Button bt1 = new Button()
+                StackLayout mpage = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+                Label lb = new Label()
                 {
-                    Text = a[i],
-                    BackgroundColor = Color.FromHex("51a279"),
+                    Text = "Move Online",
+                    HorizontalTextAlignment = TextAlignment.Center,
                     HorizontalOptions = LayoutOptions.FillAndExpand
-                    ,
-                    TextColor = Color.White, ClassId = i + "",
-                    Margin = new Thickness(20, 0, 20, 0)
                 };
-                bt1.Clicked += (sender,e)=>Bt1_Clicked(sender,e,name);
-                
-                bt1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                
-                
-                mpage.Children.Add(bt1);
+                lb.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
+                lb.BackgroundColor = Color.FromHex("51a279");
+                lb.TextColor = Color.White;
+
+                Label select = new Label()
+                {
+                    Text = "Seja bem vindo, " + name + "\nPara usar o APP Move Online você deve aceitar nossos Termos de Uso e Privacidade. ",
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand
+                };
+                select.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                mpage.Children.Add(lb);
+                mpage.Children.Add(select);
+                string[] a = new string[2] { "Ler termos", "Aceitar" };
+                int maior = 0;
+                for (int i = 0; i < 1; i++)
+                {
+                    mpage.Children.Add(new Label() { Text = "" });
+                }
+                for (int i = 0; i < a.Length; i++)
+                {
+
+                    Button bt1 = new Button()
+                    {
+                        Text = a[i],
+                        BackgroundColor = Color.FromHex("51a279"),
+                        HorizontalOptions = LayoutOptions.FillAndExpand
+                        ,
+                        TextColor = Color.White,
+                        ClassId = (i+10) + "",
+                        Margin = new Thickness(20, 0, 20, 0)
+                    };
+                    bt1.Clicked += (sender, e) => Bt1_Clicked(sender, e, name);
+
+                    bt1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+
+
+                    mpage.Children.Add(bt1);
+                }
+                sv.Content = mpage;
+                this.Content = sv;
+            
+
             }
-            sv.Content = mpage;
-            this.Content = sv;
+            else
+            {
+
+                StackLayout mpage = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+                Label lb = new Label()
+                {
+                    Text = "Move Online",
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    HorizontalOptions = LayoutOptions.FillAndExpand
+                };
+                lb.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
+                lb.BackgroundColor = Color.FromHex("51a279");
+                lb.TextColor = Color.White;
+
+                Label select = new Label()
+                {
+                    Text = "Seja bem vindo, " + name + "",
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand
+                };
+                select.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                mpage.Children.Add(lb);
+                mpage.Children.Add(select);
+                string[] a = new string[9] { "Imposto", "Consulta", "Abrir Chamado", "Documentos", "Dúvidas", "Enviar documentos", "Manual", "Termos de uso e Privacidade",  "Sair" };
+                int maior = 0;
+                for (int i = 0; i < 1; i++)
+                {
+                    mpage.Children.Add(new Label() { Text = "" });
+                }
+                //  await PopupNavigation.Instance.PushAsync(new popup(),true);
+
+                for (int i = 0; i < a.Length; i++)
+                {
+
+                    Button bt1 = new Button()
+                    {
+                        Text = a[i],
+                        BackgroundColor = Color.FromHex("51a279"),
+                        HorizontalOptions = LayoutOptions.FillAndExpand
+                        ,
+                        TextColor = Color.White,
+                        ClassId = i + "",
+                        Margin = new Thickness(20, 0, 20, 0)
+                    };
+                    bt1.Clicked += (sender, e) => Bt1_Clicked(sender, e, name);
+
+                    bt1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+
+
+                    mpage.Children.Add(bt1);
+                }
+                sv.Content = mpage;
+                this.Content = sv;
+            }
         }
 
         private void Bt1_Clicked(object sender, EventArgs e,string name)
@@ -431,27 +492,27 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
+                    lb.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
                     lb.BackgroundColor = Color.FromHex("51a279");
                     lb.TextColor = Color.White;
 
                     mpage.Children.Add(lb);
-                    mpage.Children.Add(new Label() { Text = "Preencha todos os campos para emitir o boleto :\n", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb.FontSize * 0.5f });
+                    mpage.Children.Add(new Label() { Text = "Informe aqui seu faturamento para emitir seu imposto:\n", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb.FontSize * 0.5f });
 
                     Entry pserv = new Entry()
-                    { 
-                        Placeholder="Prestação de serviços",
+                    {
+                        Placeholder = "Serviços",
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         HorizontalTextAlignment = TextAlignment.End
                          , VerticalOptions = LayoutOptions.FillAndExpand
-                         ,Keyboard= Keyboard.Numeric
+                         , Keyboard = Keyboard.Numeric
 
                     };
-                    pserv.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                    pserv.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
 
                     pserv.Focused += delegate { if (!string.IsNullOrEmpty(pserv.Text) && pserv.Text.Contains(",")) pserv.Text = pserv.Text.Replace(",", ""); };
 
-                   // pserv.TextColor = Color.FromHex("51a279");
+                    // pserv.TextColor = Color.FromHex("51a279");
                     pserv.Unfocused += delegate
                     {
                         pserv.Text = convert(pserv.Text);
@@ -476,22 +537,22 @@ After:
 
                     Entry rprod = new Entry()
                     {
-                        Placeholder= "Venda de Mercadorias",
+                        Placeholder = "Comércio",
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         HorizontalTextAlignment = TextAlignment.End
                         ,
-                        VerticalOptions = LayoutOptions.Start ,                      
+                        VerticalOptions = LayoutOptions.Start,
                         Keyboard = Keyboard.Numeric
 
                     };
-                  
+
                     rprod.Unfocused += delegate
                     {
                         rprod.Text = convert(rprod.Text);
                     };
                     rprod.Focused += delegate { if (!string.IsNullOrEmpty(rprod.Text) && rprod.Text.Contains(",")) rprod.Text = rprod.Text.Replace(",", ""); };
-                   // rprod.TextColor = Color.FromHex("51a279");
-                    rprod.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
+                    // rprod.TextColor = Color.FromHex("51a279");
+                    rprod.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                     Grid g2 = new Grid()
                     {
                         HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -516,8 +577,8 @@ After:
                     {
                         mpage.Children.Add(new Label() { Text = "" });
                     }
-                    for (int i = 1; i < DateTime.Now.Month+1; i++)
-                        meses.Add(i > 9 ? i + ("/"+DateTime.Now.Year.ToString()) : "0" + i + ("/"+DateTime.Now.Year.ToString()));
+                    for (int i = 1; i < DateTime.Now.Month + 1; i++)
+                        meses.Add(i > 9 ? i + ("/" + DateTime.Now.Year.ToString()) : "0" + i + ("/" + DateTime.Now.Year.ToString()));
                     foreach (string s in meses) date.Items.Add(s);
 
                     mpage.Children.Add(date);
@@ -527,21 +588,21 @@ After:
                     }
                     Button bt1 = new Button()
                     {
-                        Text = "Solicitar",
+                        Text = "Calcular",
                         BackgroundColor = Color.FromHex("51a279"),
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     ,
                         TextColor = Color.White,
                         Margin = new Thickness(20, 0, 20, 0)
                     };
-                    bt1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
+                    bt1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                     bt1.Clicked += async delegate {
                         if (!string.IsNullOrEmpty(rprod.Text) && !string.IsNullOrEmpty(pserv.Text) && date.SelectedItem != null)
                         {
                             bool ck = true;
-                           string rp1 = rprod.Text.Replace(",", "");
-                           string ps1= pserv.Text.Replace(",", "");
-                            
+                            string rp1 = rprod.Text.Replace(",", "");
+                            string ps1 = pserv.Text.Replace(",", "");
+
                             int a, b;
                             if (int.TryParse(ps1, out a) && int.TryParse(rp1, out b))
                             {
@@ -603,7 +664,7 @@ After:
                         Margin = new Thickness(20, 0, 20, 0)
                     };
 
-                    bt2.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
+                    bt2.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                     bt2.Clicked += delegate { MPage(name); };
                     mpage.Children.Add(bt2);
                     this.Content = mpage;
@@ -613,22 +674,22 @@ After:
                     try
                     {
                         ScrollView sw = new ScrollView();
-                    StackLayout mpage1 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
-                    Label lb1 = new Label()
-                    {
-                        Text = "Move Online",
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        HorizontalOptions = LayoutOptions.FillAndExpand
-                    };
-                    lb1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
-                    lb1.BackgroundColor = Color.FromHex("51a279");
-                    lb1.TextColor = Color.White;
-                    mpage1.Children.Add(lb1);
-                    mpage1.Children.Add(new Label() { Text = "Consulte aqui suas emissões", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb1.FontSize * 0.5f });
-                    sw.Content = mpage1;
-                    for (int i = 0; i < 1; i++) mpage1.Children.Add(new Label() { Text = "" });
+                        StackLayout mpage1 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+                        Label lb1 = new Label()
+                        {
+                            Text = "Move Online",
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            HorizontalOptions = LayoutOptions.FillAndExpand
+                        };
+                        lb1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
+                        lb1.BackgroundColor = Color.FromHex("51a279");
+                        lb1.TextColor = Color.White;
+                        mpage1.Children.Add(lb1);
+                        mpage1.Children.Add(new Label() { Text = "Gerencie aqui seus impostos", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb1.FontSize * 0.5f });
+                        sw.Content = mpage1;
+                        for (int i = 0; i < 1; i++) mpage1.Children.Add(new Label() { Text = "" });
 
-                    this.Content = sw;
+                        this.Content = sw;
                         ActivityIndicator loading = new ActivityIndicator()
                         {
                             HorizontalOptions = LayoutOptions.Center,
@@ -636,81 +697,81 @@ After:
                             IsRunning = true
                         };
                         mpage1.Children.Add(loading);
-                    string reqs = await DependencyService.Get<INatives>().GetRequests(localsite + "login.php", Application.Current.Properties["cnpj"].ToString());
-                    string[] rqs = reqs.Split('|');
+                        string reqs = await DependencyService.Get<INatives>().GetRequests(localsite + "login.php", Application.Current.Properties["cnpj"].ToString());
+                        string[] rqs = reqs.Split('|');
                         mpage1.Children.Remove(loading);
-                    for (int i = 0; i < rqs.Length - 1; i++)
-                    {
-
-                        Label mes = new Label()
+                        for (int i = 0; i < rqs.Length - 1; i++)
                         {
-                            Text = "Mês = " + ((int.Parse(rqs[i].Split('@')[0]) > 9) ? int.Parse(rqs[i].Split('@')[0]) + ("/"+DateTime.Now.Year.ToString()) : 0 + int.Parse(rqs[i].Split('@')[0]) + ("/"+DateTime.Now.Year.ToString())),
-                            HorizontalOptions = LayoutOptions.CenterAndExpand,
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            Margin = new Thickness(20, 0, 20, 0)
-                        };
-                        mes.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                        Label sts = new Label()
-                        {
-                            Text = "Status : " + rqs[i].Split('@')[1],
-                            HorizontalOptions = LayoutOptions.CenterAndExpand,
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            Margin = new Thickness(20, 0, 20, 0)
-                        };
-                        sts.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                        mpage1.Children.Add(mes);
-                        mpage1.Children.Add(sts);
-                        if (!string.IsNullOrEmpty(rqs[i].Split('@')[2])) {
-                            Button bolet = new Button()
-                            {
-                                Text = "Visualizar boleto",
-                                BackgroundColor = Color.FromHex("51a279"),
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                TextColor = Color.White,
-                                ClassId = i + "",
-                                Margin = new Thickness(40, 0, 40, 0)
-                            };
-                            bolet.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                            bolet.ClassId = rqs[i].Split('@')[2];
-                            bolet.Clicked += Bolet_Clicked;
-                            Grid g = new Grid() { HorizontalOptions = LayoutOptions.FillAndExpand };
-                            Label pg1 = new Label() { Margin = new Thickness(30, 0, 30, 0), Text = "Pago :",  HorizontalOptions = LayoutOptions.Start };
-                            pg1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                            g.Children.Add(pg1);
 
-                            Xamarin.Forms.Switch pg2 = new Xamarin.Forms.Switch() { HorizontalOptions = LayoutOptions.End,Margin= new Thickness(0,0,20,0) };
-                            pg2.IsToggled = rqs[i].Split('@')[3] == "0" ? false : true;
-                            pg2.Toggled += (sender, e) => Pg2_Toggled(sender, e, name, pg);
-                            pg2.ClassId = rqs[i].Split('@')[0];
-                            g.Children.Add(pg2);
-                            mpage1.Children.Add(g);
-                            mpage1.Children.Add(bolet);
-                            Button bolet1 = new Button()
+                            Label mes = new Label()
                             {
-                                Text = "Recalcular",
-                                BackgroundColor = Color.FromHex("51a279"),
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                TextColor = Color.White,
-                                ClassId = i + "",
-                                Margin = new Thickness(40, 0, 40, 0)
+                                Text = "Mês = " + ((int.Parse(rqs[i].Split('@')[0]) > 9) ? int.Parse(rqs[i].Split('@')[0]) + ("/" + DateTime.Now.Year.ToString()) : 0 + int.Parse(rqs[i].Split('@')[0]) + ("/" + DateTime.Now.Year.ToString())),
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
                             };
-                            bolet1.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                            bolet1.ClassId = rqs[i].Split('@')[0];
-                            mpage1.Children.Add(bolet1);
-                            bolet1.Clicked += (sender, e) => Bolet1_Clicked(sender, e, name, pg);
+                            mes.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            Label sts = new Label()
+                            {
+                                Text = "Status : " + rqs[i].Split('@')[1].Replace("Boleto","Imposto"),
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            sts.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            mpage1.Children.Add(mes);
+                            mpage1.Children.Add(sts);
+                            if (!string.IsNullOrEmpty(rqs[i].Split('@')[2])) {
+                                Button bolet = new Button()
+                                {
+                                    Text = "Visualizar imposto",
+                                    BackgroundColor = Color.FromHex("51a279"),
+                                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                                    TextColor = Color.White,
+                                    ClassId = i + "",
+                                    Margin = new Thickness(40, 0, 40, 0)
+                                };
+                                bolet.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                                bolet.ClassId = rqs[i].Split('@')[2];
+                                bolet.Clicked += Bolet_Clicked;
+                                Grid g = new Grid() { HorizontalOptions = LayoutOptions.FillAndExpand };
+                                Label pg1 = new Label() { Margin = new Thickness(30, 0, 30, 0), Text = "", HorizontalOptions = LayoutOptions.Start };
+                                pg1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                                g.Children.Add(pg1);
+
+                                Xamarin.Forms.Switch pg2 = new Xamarin.Forms.Switch() { HorizontalOptions = LayoutOptions.End, Margin = new Thickness(0, 0, 20, 0) };
+                                pg2.IsToggled = rqs[i].Split('@')[3] == "0" ? false : true;
+                                pg2.Toggled += (sender, e) => Pg2_Toggled(sender, e, name, pg);
+                                pg2.ClassId = rqs[i].Split('@')[0];
+                                g.Children.Add(pg2);
+                                mpage1.Children.Add(g);
+                                mpage1.Children.Add(bolet);
+                                Button bolet1 = new Button()
+                                {
+                                    Text = "Recalcular",
+                                    BackgroundColor = Color.FromHex("51a279"),
+                                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                                    TextColor = Color.White,
+                                    ClassId = i + "",
+                                    Margin = new Thickness(40, 0, 40, 0)
+                                };
+                                bolet1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                                bolet1.ClassId = rqs[i].Split('@')[0];
+                                mpage1.Children.Add(bolet1);
+                                bolet1.Clicked += (sender, e) => Bolet1_Clicked(sender, e, name, pg);
+                            }
+                            for (int j = 0; j < 1; j++) mpage1.Children.Add(new Label() { Text = "" });
+                            BoxView bx = new BoxView()
+                            {
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                HeightRequest = 2
+                                , BackgroundColor = Color.Gray
+                            };
+                            mpage1.Children.Add(bx);
+
+
+
                         }
-                        for (int j = 0; j < 1; j++) mpage1.Children.Add(new Label() { Text = "" });
-                        BoxView bx = new BoxView()
-                        {
-                            HorizontalOptions = LayoutOptions.FillAndExpand,                            
-                            HeightRequest = 2
-                            ,BackgroundColor= Color.Gray
-                        };
-                        mpage1.Children.Add(bx);
-
-
-
-                    }
                         Button bta = new Button()
                         {
                             Text = "Atualizar",
@@ -721,23 +782,23 @@ After:
                             Margin = new Thickness(20, 0, 20, 0)
                         };
 
-                        bta.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                        bta.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                         bta.Clicked += delegate { MenuPageAsync(pg, name); };
                         mpage1.Children.Add(bta);
                         Button btv = new Button()
-                    {
-                        Text = "Voltar",
-                        BackgroundColor = Color.FromHex("51a279"),
-                        HorizontalOptions = LayoutOptions.FillAndExpand
+                        {
+                            Text = "Voltar",
+                            BackgroundColor = Color.FromHex("51a279"),
+                            HorizontalOptions = LayoutOptions.FillAndExpand
                   ,
-                        TextColor = Color.White,
-                        Margin = new Thickness(20, 0, 20, 0)
-                    };
+                            TextColor = Color.White,
+                            Margin = new Thickness(20, 0, 20, 0)
+                        };
 
-                    btv.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 0.8f;
-                    btv.Clicked += delegate { MPage(name); };
-                    mpage1.Children.Add(btv);
-            }
+                        btv.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                        btv.Clicked += delegate { MPage(name); };
+                        mpage1.Children.Add(btv);
+                    }
                     catch (Exception e)
                     {
                         alert(e.ToString());
@@ -752,14 +813,128 @@ After:
                         HorizontalTextAlignment = TextAlignment.Center,
                         HorizontalOptions = LayoutOptions.FillAndExpand
                     };
-                    lb2.FontSize *= d* (Device.RuntimePlatform==Device.iOS?1.5f:1f)* 1.5f;
+                    lb2.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 1.5f;
                     lb2.BackgroundColor = Color.FromHex("51a279");
                     lb2.TextColor = Color.White;
                     mpage2.Children.Add(lb2);
-                    mpage2.Children.Add(new Label() { Text = "Solicite aqui um serviço a seu contador :", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb2.FontSize * 0.5f });
+                    mpage2.Children.Add(new Label() { Text = "Abra aqui seu chamado :", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, FontSize = lb2.FontSize * 0.5f });
 
-                    string[] services = new string[] { "Abertura de Empresas", "Agendar um Atendimento on-line", "Ajuda para Emitir uma NF-e", "Ajuda para Emitir uma NFS-e", "Atualizar CNPJ", "Atualizar dados de cobrança", "Cadastro de Anuncios no CNPJ", "Cancelar CNPJ", "Certidão Negativa de Débitos", "Certificado Digital", "Contratar um Funcionário", "Declaração de Faturamento", "Demitir um Funcionário", "Enviar meu Funcionário de Férias", "Folha de Pagamento de Funcionários", "Folha de Pagamento de Sócios", "Imposto de Renda", "Licença de Funcionamento", "Minha Empresa Cresceu Preciso de Ajuda", "Não Recebi a Folha de Pagamento", "Não Recebi meu Parcelamento", "Não Recebi meus Impostos", "Preciso de Ajuda me Ligue", "Preciso de um Doc. Assinado pelo Contador", "Quero abrir um chamado estou com problemas", "Quero Indicar um Cliente e Ganhar Desconto", "Quero Regularizar meus Impostos", "Relatórios da minha Empresa", "Segunda via de Boleto da Mensalidade", "Tenho uma duvida preciso da Ajuda de um Contador" };
-                    foreach(string s in services)
+                    string[] services = new string[] {"Certificado digital", "Declaração de faturamento", "Folha de funcionários", "Folha de sócios", "Férias", "Rescisão", "INSS", "FGTS", "IRRF", "Simples Nacional", "Parcelamento", "Relatorios contabilidade", "Nota fiscal de produtos", "Nota fiscal de serviços", "Regularizar mensalidade", "Demais serviços"};
+                    //"Abertura de Empresas", "Agendar um Atendimento on-line", "Ajuda para Emitir uma NF-e", "Ajuda para Emitir uma NFS-e", "Atualizar CNPJ", "Atualizar dados de cobrança", "Cadastro de Anuncios no CNPJ", "Cancelar CNPJ", "Certidão Negativa de Débitos", "Certificado Digital", "Contratar um Funcionário", "Declaração de Faturamento", "Demitir um Funcionário", "Enviar meu Funcionário de Férias", "Folha de Pagamento de Funcionários", "Folha de Pagamento de Sócios", "Imposto de Renda", "Licença de Funcionamento", "Minha Empresa Cresceu Preciso de Ajuda", "Não Recebi a Folha de Pagamento", "Não Recebi meu Parcelamento", "Não Recebi meus Impostos", "Preciso de Ajuda me Ligue", "Preciso de um Doc. Assinado pelo Contador", "Quero abrir um chamado estou com problemas", "Quero Indicar um Cliente e Ganhar Desconto", "Quero Regularizar meus Impostos", "Relatórios da minha Empresa", "Segunda via de Boleto da Mensalidade", "Tenho uma duvida preciso da Ajuda de um Contador" };
+                    Label esq = new Label() { Text = "Visualizar chamados abertos", FontSize= lb2.FontSize*0.5f, TextColor = Color.FromHex("51a279"), HorizontalTextAlignment = TextAlignment.Center, HorizontalOptions = LayoutOptions.Center };
+                    TapGestureRecognizer tap = new TapGestureRecognizer();
+                    tap.Tapped += async delegate
+                    {
+                        //  EsqueceuSenha();
+                        sw1 = new ScrollView();
+                        mpage2 = new StackLayout() { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+                        mpage2.Children.Add(lb2);
+                        string chamados = await DependencyService.Get<INatives>().getChamadosAsync(localsite + "login.php", Application.Current.Properties["cnpj"].ToString());
+                        var splited = chamados.Split('&');
+                        for(var i =0;i<splited.Length-1;i++)
+                        {
+                            Console.WriteLine(splited[i]);
+                            var infos = splited[i].Split('|');
+                            Label mes = new Label()
+                            {
+                                Text = "Tipo: \n"+infos[0] ,
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            mes.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            Label sts = new Label()
+                            {
+                                Text = "Data de abertura:\n "+infos[1] ,
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            sts.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            DateTime dt  = DateTime.ParseExact(infos[1], "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                            dt = dt.AddDays(2);
+                            Label sts2 = new Label()
+                            {
+                                Text = "Prazo de resposta:\n " + dt.ToString("dd/MM/yyyy"),
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            sts2.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            var status = new string[] { "Em análise", "Respondido", "Encerrado" };
+                            Label sts3 = new Label()
+                            {
+                                Text = "Status:\n" +  status [int.Parse(infos[2])],
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            sts3.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            Label sts4 = new Label()
+                            {
+                                Text = "Descrição:\n" + infos[3].Replace("<br />","\n"),
+                                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                Margin = new Thickness(20, 0, 20, 0)
+                            };
+                            sts4.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            mpage2.Children.Add(mes);
+                            mpage2.Children.Add(sts);
+                            mpage2.Children.Add(sts2);
+                            mpage2.Children.Add(sts3);
+                            mpage2.Children.Add(sts4);
+                            Button bolet1 = new Button()
+                            {
+                                Text = "Encerrar",
+                                BackgroundColor = Color.FromHex("51a279"),
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                TextColor = Color.White,
+                                ClassId = i + "",
+                                Margin = new Thickness(40, 0, 40, 0)
+                            };
+                            bolet1.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                            //bolet1.ClassId = rqs[i].Split('@')[0];
+                           if(infos[2]!="2") mpage2.Children.Add(bolet1);
+                            // bolet1.Clicked += (sender, e) => Bolet1_Clicked(sender, e, name, pg);
+                            bolet1.Clicked += async delegate
+                            {
+                                string enc = await DependencyService.Get<INatives>().encerrarChamadoAsync(localsite + "login.php", infos[4]);
+                                if (enc == "OK") MenuPageAsync(2, name);
+                            };
+                            for (int j = 0; j < 1; j++) mpage2.Children.Add(new Label() { Text = "" });
+                            BoxView bx = new BoxView()
+                            {
+                                HorizontalOptions = LayoutOptions.FillAndExpand,
+                                HeightRequest = 2
+                                ,
+                                BackgroundColor = Color.Gray
+                            };
+                            mpage2.Children.Add(bx);
+
+
+                    }
+
+                        Button btbk = new Button()
+                        {
+                            Text = "Voltar",
+                            BackgroundColor = Color.FromHex("51a279"),
+                            HorizontalOptions = LayoutOptions.FillAndExpand
+                            ,
+                            TextColor = Color.White,
+                            Margin = new Thickness(20, 0, 20, 0)
+                        };
+
+                        btbk.FontSize *= d * (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
+                        btbk.Clicked += delegate { MenuPageAsync(2, name); };
+                        mpage2.Children.Add(btbk);
+                        sw1.Content = mpage2;
+                        this.Content = sw1;
+                    };
+                    esq.GestureRecognizers.Add(tap);
+                    mpage2.Children.Add(esq);
+
+                    foreach (string s in services)
                     {
                         Button btn = new Button()
                         {
@@ -828,7 +1003,7 @@ After:
                          if (await DisplayAlert("Move Online", "Você realmente deseja solicitar a ajuda ou sugestão de " + edit.Text, "Sim", "Não"))
                          {
                              string resu = await DependencyService.Get<INatives>().SolicitarServ(localsite + "email.php", edit.Text,
-                                 Application.Current.Properties["cnpj"].ToString(), name);
+                                 Application.Current.Properties["cnpj"].ToString(), name,edit.Text);
                              if (resu == "OK")
                              {
                                  alert("Sucesso ao solicitar o serviço");
@@ -871,18 +1046,14 @@ After:
                     {
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         HorizontalTextAlignment = TextAlignment.Start,
-                        Text= @"A Move Online surgiu com o propósito de te ajudar a crescer. Somos uma empresa de contabilidade online especializada em otimização de processos e geração de resultados. 
-"+""+@" Nossos serviços, plataformas e ferramentas são inovadores e altamente tecnológicos. Acreditamos no bom uso da internet como forma de facilitar o dia a dia de empreendedores. Tudo para garantir a saúde financeira do seu negócio. 
-Contratando um dos planos da Move Online você terá uma série de vantagens, entre elas a economia de recursos, maiores resultados, segurança e praticidade nos processos.
-"+""+@"Nossa equipe é altamente treinada e capacitada para oferecer o melhor atendimento, em todas as etapas. Desde a contratação, até a prestação do serviço, mantemos um relacionamento contínuo com os nossos clientes.
-Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfeito. Com a Move Online, a contabilidade da sua empresa fica muito mais fácil."+"\n",
+                        Text= @"A Move Online conta com uma equipe de especialistas em contabilidade, para atender aos interesses da sua empresa com excelência. Acreditamos que a tecnologia pode ser utilizada para otimizar processos, diminuir custos e gerar resultados econômicos. Nesse Canal você pode enviar arquivos direto do seu celular."+"\n",
                         Margin = new Thickness(20, 0, 20, 0)
 
                     };
                     abt.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                     Button btz = new Button()
                     {
-                        Text = "Conheça nosso site",
+                        Text = "Enviar documentos",
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         Margin = new Thickness(20, 0, 20, 0),
                         BackgroundColor = Color.FromHex("51a279"),
@@ -892,7 +1063,7 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
                     btz.FontSize *= d* (Device.RuntimePlatform == Device.iOS ? 1.5f : 1f) * 0.8f;
                     btz.Clicked += delegate
                     {
-                        Device.OpenUri(new Uri("http://moveonline.com.br/"));
+                        Device.OpenUri(new Uri("http://moveonline.com.br/sobre.html#fale-conosco"));
                     };
                     mpage4.Children.Add(lb4);
                     mpage4.Children.Add(abt);
@@ -917,12 +1088,35 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
 
                     break;
                 case 6:
-                    showtutorial(name);
+                    //showtutorial(name);
+                    Device.OpenUri(new Uri(localsite + "manual.pdf"));
+
+                    Device.OpenUri(new Uri("http://bit.ly/MoveTutorial"));
+
                     break;
                 case 7:
+                    Device.OpenUri(new Uri(localsite + "termosuso.pdf"));
+                    break;
+                case 8:
+
                     Application.Current.Properties.Remove("cnpj");
                     Application.Current.Properties.Remove("pass");
-                    SplashLayout();
+                    Application.Current.Properties.Remove("aceitatermos");
+                    SplashLayout(); break;
+
+                case 9:
+                    
+                    break;
+                case 10:
+                    Device.OpenUri(new Uri(localsite + "termosuso.pdf"));
+
+                    break;
+                case 11:
+                    Application.Current.Properties["aceitatermos"] = true;
+                    MPage(name);
+                    break;
+                case 12:
+                    await DisplayAlert("Aceitar termos", "Para utilizar o app Move Online você deve aceitar os termos", "Ok");
                     break;
                 case 3:
                     ScrollView sw3 = new ScrollView();
@@ -1031,8 +1225,10 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
         {
             if ( await DisplayAlert("Move Online", "Você realmente deseja solicitar o serviço de " + ((Button)sender).Text, "Sim", "Não"))
             {
+                string descri = await InputBox(this.Navigation);
+
                 string resu = await DependencyService.Get<INatives>().SolicitarServ(localsite + "email.php", ((Button)sender).Text,
-                    Application.Current.Properties["cnpj"].ToString(), name);
+                    Application.Current.Properties["cnpj"].ToString(), name,descri);
                 if (resu == "OK") alert("Sucesso ao solicitar o serviço");
                 else alert("Erro no sistema");
             }
@@ -1099,6 +1295,85 @@ Experimente agora mesmo um de nossos pacotes e seja mais um empresário satisfei
                 alert(ex.ToString());
             }
         }
+        public static Task<string> InputBox(INavigation navigation)
+        {
+            // wait in this proc, until user did his input 
+            var tcs = new TaskCompletionSource<string>();
+
+            var lblTitle = new Label { Text = "Detalhes", HorizontalOptions = LayoutOptions.Center, FontAttributes = FontAttributes.Bold };
+            var lblMessage = new Label() { Text = "Digite os detalhes do seu chamado, caso exista.", HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
+            var txtInput = new Entry { Text = "",
+                Placeholder = "",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                HorizontalTextAlignment = TextAlignment.End
+                         ,
+                VerticalOptions = LayoutOptions.FillAndExpand
+                         
+               
+            };
+
+            var btnOk = new Button
+            {
+                Text = "Ok",
+                BackgroundColor = Color.FromHex("51a279"),
+                HorizontalOptions = LayoutOptions.FillAndExpand
+                ,
+                TextColor = Color.White,
+                Margin = new Thickness(20, 0, 20, 0)
+            };
+            btnOk.Clicked += async (s, e) =>
+            {
+                // close page
+                var result = txtInput.Text;
+                await navigation.PopModalAsync();
+                // pass result
+                tcs.SetResult(result);
+            };
+
+            var btnCancel = new Button
+            {
+                Text = "Cancelar",
+                BackgroundColor = Color.FromHex("51a279"),
+                HorizontalOptions = LayoutOptions.FillAndExpand
+                ,
+                TextColor = Color.White,
+                Margin = new Thickness(20, 0, 20, 0)
+            };
+            btnCancel.Clicked += async (s, e) =>
+            {
+                // close page
+                await navigation.PopModalAsync();
+                // pass empty result
+                tcs.SetResult(null);
+            };
+
+            var slButtons = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Children = { btnOk, btnCancel },
+            };
+
+            var layout = new StackLayout
+            {
+                Padding = new Thickness(0, 40, 0, 0),
+                VerticalOptions = LayoutOptions.StartAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Orientation = StackOrientation.Vertical,
+                Children = { lblTitle, lblMessage, txtInput, slButtons },
+            };
+
+            // create and show page
+            var page = new ContentPage();
+            page.Content = layout;
+            navigation.PushModalAsync(page);
+            // open keyboard
+            txtInput.Focus();
+
+            // code is waiting her, until result is passed with tcs.SetResult() in btn-Clicked
+            // then proc returns the result
+            return tcs.Task;
+        }
+
 
     }
    

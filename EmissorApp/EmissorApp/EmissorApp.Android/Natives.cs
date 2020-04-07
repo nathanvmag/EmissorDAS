@@ -41,6 +41,7 @@ namespace EmissorApp.Droid
             reqparm.Add("rvend", rprod);
             reqparm.Add("mes", date);
             reqparm.Add("tt", tt);
+            
             byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             if (responsebody == "OK")
@@ -60,6 +61,18 @@ namespace EmissorApp.Droid
             else return responsebody;
         }
 
+        public async Task<string> encerrarChamadoAsync(string site, string id)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "8802");
+            reqparm.Add("id", id);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
+
         public async Task<string> esqsenha(string url,string email)
         {
             WebClient wb = new WebClient();
@@ -68,6 +81,18 @@ namespace EmissorApp.Droid
             reqparm.Add("servID", "103");
             reqparm.Add("cnpj", email);           
             byte[] responsebytes = await wb.UploadValuesTaskAsync(url, "POST", reqparm);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            return responsebody;
+        }
+
+        public async Task<string> getChamadosAsync(string site, string cnpj)
+        {
+            WebClient wb = new WebClient();
+            wb.Encoding = Encoding.UTF8;
+            var reqparm = new System.Collections.Specialized.NameValueCollection();
+            reqparm.Add("servID", "8801");
+            reqparm.Add("cnpj", cnpj);
+            byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             return responsebody;
         }
@@ -204,7 +229,7 @@ namespace EmissorApp.Droid
             return responsebody;
         }
 
-        public async Task<string> SolicitarServ(string site, string serv, string cnpj, string name)
+        public async Task<string> SolicitarServ(string site, string serv, string cnpj, string name,string desc)
         {
             WebClient wb = new WebClient();
             wb.Encoding = Encoding.UTF8;
@@ -213,6 +238,7 @@ namespace EmissorApp.Droid
             reqparm.Add("cnpj", cnpj);
             reqparm.Add("name", name);
             reqparm.Add("serv", serv);
+            reqparm.Add("desc", desc);
             byte[] responsebytes = await wb.UploadValuesTaskAsync(site, "POST", reqparm);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             return responsebody;

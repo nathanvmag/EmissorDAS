@@ -14,8 +14,10 @@ namespace EmissorApp
         Task<string> GetRequests(string site, string cnpj);
         Task<string> Save(string site, string cnpj, string date, string pg);
         Task<string> Recalculate(string site, string cnpj, string mes);
-        Task<string> SolicitarServ(string site, string serv, string cnpj, string name);
+        Task<string> SolicitarServ(string site, string serv, string cnpj, string name,string descri);
         Task<string> getfiles(string site, string cnpj, string mes);
+        Task<string> getChamadosAsync(string site, string cnpj);
+        Task<string> encerrarChamadoAsync(string site, string id);
         float density();
     }
 }

@@ -40,9 +40,14 @@ namespace EmissorApp.Droid
                     {
                         notday = day;
                         Log.Debug("SERVICEE", "NOTIFICA AI TIO");
-                        Notify(this, "Move Online", "Não esqueça de emitir seu imposto", 0);
-
+                        Notify(this, "Move Online", " Não esqueça de gerar seu imposto.", 0);
+                        Notify(this, "Move Online", "Gerencie o pagamento de seus impostos direto de seu aplicativo em CONSULTA.", 3);
+                        if(day<=22)
+                        {
+                            Notify(this, "Move Online", "Seu imposto vence dia 20 não esqueça de pagar.",1);
+                        }
                     }
+                   
                 },null,0,20000
             
             );
@@ -79,7 +84,7 @@ namespace EmissorApp.Droid
 
             // Publish the notification:
             const int notificationId = 8;
-            notificationManager.Notify(notificationId, notification);
+            notificationManager.Notify(Value+notificationId, notification);
 
         }
 
